@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>The Space — Teacher Panel</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: 'Nunito', sans-serif;
+            color: #173D43;
+
+            background:
+                radial-gradient(
+                    circle at 10% 90%,
+                    rgba(87,209,198,0.22),
+                    transparent 42%
+                ),
+                linear-gradient(
+                    135deg,
+                    #F7FCFA 0%,
+                    #EDF8F5 52%,
+                    #E4F5F1 100%
+                );
+        }
+
+
+        .page {
+            width: 100%;
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 60px 24px 100px;
+
+            position: relative;
+z-index: 2;
+
+            
+        }
+
+
+        header {
+            text-align: center;
+            margin-bottom: 38px;
+        }
+
+
+        .logo {
+            font-size: 54px;
+            font-weight: 800;
+
+            letter-spacing: 8px;
+
+            color: #138E87;
+        }
+
+
+        .subtitle {
+            margin-top: 14px;
+
+            font-size: 18px;
+            font-weight: 700;
+
+            letter-spacing: 7px;
+
+            color: #168F89;
+        }
+
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr;
+
+            gap: 22px;
+        }
+
+
+        .card {
+            padding: 28px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.82),
+                    rgba(255,255,255,0.62)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.95);
+
+            box-shadow:
+                0 18px 36px rgba(97,155,147,0.13);
+        }
+
+
+        .wide {
+            grid-column: 1 / -1;
+        }
+
+
+        h2 {
+            margin:
+                0
+                0
+                22px;
+
+            color: #138E87;
+
+            font-size: 21px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+
+        label {
+            display: block;
+
+            margin:
+                16px
+                0
+                7px;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            color: #536F68;
+        }
+
+
+        select,
+        input {
+            width: 100%;
+
+            padding:
+                12px
+                14px;
+
+            border-radius: 12px;
+
+            border:
+                1px solid rgba(122,160,149,0.30);
+
+            background:
+                rgba(255,255,255,0.82);
+
+            font-family: 'Nunito', sans-serif;
+
+            font-size: 16px;
+
+            color: #173D43;
+
+            outline: none;
+        }
+
+
+        select:focus,
+        input:focus {
+            border-color:
+                rgba(19,142,135,0.60);
+
+            box-shadow:
+                0 0 0 3px rgba(19,142,135,0.08);
+        }
+
+
+        .button {
+            width: 100%;
+
+            margin-top: 22px;
+
+            padding:
+                13px
+                18px;
+
+            border: none;
+
+            border-radius: 13px;
+
+            background: #138E87;
+
+            color: white;
+
+            font-family: 'Nunito', sans-serif;
+
+            font-size: 16px;
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+
+        .button:hover {
+            opacity: 0.92;
+        }
+
+
+        .tasks {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+
+        .task-row {
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            padding:
+                14px
+                16px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.62);
+
+            border:
+                1px solid rgba(122,160,149,0.16);
+        }
+
+
+        .task-row input {
+            width: 19px;
+            height: 19px;
+
+            flex-shrink: 0;
+
+            accent-color: #138E87;
+        }
+
+
+        .task-info {
+            flex: 1;
+        }
+
+
+        .task-id {
+            font-size: 15px;
+            font-weight: 800;
+
+            color: #138E87;
+        }
+
+
+        .task-title {
+            margin-top: 2px;
+
+            font-size: 16px;
+
+            color: #173D43;
+        }
+
+
+        .empty {
+            color: #708A84;
+
+            font-size: 15px;
+        }
+
+
+        .status {
+            min-height: 21px;
+
+            margin-top: 14px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            color: #536F68;
+        }
+
+
+        .success {
+            color: #138E87;
+        }
+
+
+        .error {
+            color: #B45D5D;
+        }
+
+
+        .small-note {
+            margin-top: 8px;
+
+            color: #708A84;
+
+            font-size: 13px;
+        }
+
+
+        @media (max-width: 760px) {
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .wide {
+                grid-column: auto;
+            }
+
+
+            .logo {
+                font-size: 38px;
+
+                letter-spacing: 5px;
+            }
+
+        }
+
+        /* BACK BUTTON */
+
+.back-button {
+    position: fixed;
+    top: 24px;
+    left: 28px;
+
+    z-index: 20;
+
+    padding: 8px 12px;
+
+    border-radius: 10px;
+
+    color: #138E87;
+
+    text-decoration: none;
+
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+
+    background: rgba(255,255,255,0.42);
+
+    border: 1px solid rgba(255,255,255,0.75);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition: 0.2s ease;
+}
+
+.back-button:hover {
+    background: rgba(255,255,255,0.72);
+    transform: translateX(-3px);
+}
+
+
+/* LOGO */
+
+.corner-logo {
+    position: fixed;
+
+    right: 28px;
+    bottom: 22px;
+
+    width: 180px;
+    height: auto;
+
+    z-index: 10;
+
+    object-fit: contain;
+}
+
+
+/* TOP ARC */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    width: 900px;
+    height: 900px;
+
+    top: -680px;
+    right: -290px;
+
+    border-radius: 50%;
+
+    border: 28px solid rgba(255,255,255,0.12);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.92),
+        0 0 0 1px rgba(255,255,255,0.35),
+        0 12px 34px rgba(100,160,151,0.05);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* BOTTOM LARGE CIRCLE */
+
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 285px;
+    height: 285px;
+
+    left: -45px;
+    bottom: -140px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.17),
+            rgba(255,255,255,0.04)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.76);
+
+    box-shadow:
+        inset 2px 2px 8px rgba(255,255,255,0.30),
+        inset -3px -3px 10px rgba(82,165,154,0.04);
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+/* SMALL BOTTOM CIRCLES */
+
+.decor-circle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.16),
+            rgba(255,255,255,0.03)
+        );
+
+    border: 1px solid rgba(255,255,255,0.78);
+
+    box-shadow:
+        inset 2px 2px 7px rgba(255,255,255,0.30),
+        inset -2px -2px 8px rgba(82,165,154,0.04);
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+}
+
+
+/* средний кружок */
+
+.decor-circle-small {
+    width: 108px;
+    height: 108px;
+
+    left: 2.2%;
+    bottom: 10.5%;
+}
+
+.decor-circle-tiny {
+    width: 72px;
+    height: 72px;
+
+    left: 10.8%;
+    bottom: 0%;
+}
+
+
+/* =========================================
+   TEACHER ACCESS
+========================================= */
+
+.hidden {
+    display: none !important;
+}
+
+.login-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(87,209,198,0.22),
+            transparent 42%
+        ),
+        linear-gradient(
+            135deg,
+            #F7FCFA 0%,
+            #EDF8F5 52%,
+            #E4F5F1 100%
+        );
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+
+    padding: 38px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.86),
+            rgba(255,255,255,0.68)
+        );
+
+    border: 1px solid rgba(255,255,255,0.95);
+
+    box-shadow:
+        0 20px 46px rgba(97,155,147,0.16);
+}
+
+.login-logo {
+    text-align: center;
+
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 6px;
+
+    color: #138E87;
+}
+
+.login-subtitle {
+    margin: 12px 0 30px;
+
+    text-align: center;
+
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 5px;
+
+    color: #168F89;
+}
+
+.password-input {
+    text-align: center;
+    font-size: 26px;
+    letter-spacing: 12px;
+}
+
+.text-button {
+    width: 100%;
+    margin-top: 14px;
+    padding: 8px;
+
+    border: none;
+    background: transparent;
+
+    color: #138E87;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.reset-text {
+    margin: 0 0 20px;
+    color: #536F68;
+    line-height: 1.5;
+}
+
+.logout-button {
+    position: fixed;
+    top: 24px;
+    right: 28px;
+    z-index: 20;
+
+    padding: 8px 12px;
+
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.75);
+
+    background: rgba(255,255,255,0.42);
+    color: #138E87;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition: 0.2s ease;
+}
+
+.logout-button:hover {
+    background: rgba(255,255,255,0.72);
+}
+
+@media (max-width: 760px) {
+    .logout-button {
+        top: 70px;
+        right: 18px;
+    }
+
+    .login-card {
+        padding: 30px 24px;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+
+<img
+    src="logo.png"
+    class="corner-logo"
+    alt="The Space English Online"
+>
+
+<div id="loginScreen" class="login-screen">
+    <div class="login-card">
+
+        <div class="login-logo">THE SPACE</div>
+        <div class="login-subtitle">TEACHER ACCESS</div>
+
+        <div id="loginStep">
+
+            <label for="teacherPassword">Password</label>
+
+            <input
+                id="teacherPassword"
+                class="password-input"
+                type="password"
+                maxlength="4"
+                autocomplete="current-password"
+                placeholder="••••"
+            >
+
+            <button
+                class="button"
+                onclick="teacherLogin()"
+            >
+                SIGN IN
+            </button>
+
+            <button
+                class="text-button"
+                onclick="requestReset()"
+            >
+                Forgot password?
+            </button>
+
+            <div id="loginStatus" class="status"></div>
+
+        </div>
+
+        <div id="resetStep" class="hidden">
+
+            <p class="reset-text">
+                A 6-digit reset code was sent to your email.
+            </p>
+
+            <label for="resetCode">Reset code</label>
+
+            <input
+                id="resetCode"
+                type="text"
+                inputmode="numeric"
+                maxlength="6"
+                placeholder="000000"
+            >
+
+            <label for="newPassword">
+                New 4-character password
+            </label>
+
+            <input
+                id="newPassword"
+                type="password"
+                maxlength="4"
+                placeholder="••••"
+            >
+
+            <button
+                class="button"
+                onclick="resetPassword()"
+            >
+                SAVE NEW PASSWORD
+            </button>
+
+            <button
+                class="text-button"
+                onclick="showLogin()"
+            >
+                Back to sign in
+            </button>
+
+            <div id="resetStatus" class="status"></div>
+
+        </div>
+
+    </div>
+</div>
+
+    <div class="decor-circle decor-circle-small"></div>
+<div class="decor-circle decor-circle-tiny"></div>
+
+    <a href="index.html" class="back-button">
+    ← BACK TO PLATFORM
+</a>
+
+<button
+    id="logoutButton"
+    class="logout-button hidden"
+    onclick="logoutTeacher()"
+>
+    LOG OUT
+</button>
+<div class="page">
+
+
+    <header>
+
+        <div class="logo">
+            THE SPACE
+        </div>
+
+        <div class="subtitle">
+            TEACHER PANEL
+        </div>
+
+    </header>
+
+
+    <div class="grid">
+
+
+        <!-- ======================================
+             ВЫБОР УЧЕНИКА
+        ======================================= -->
+
+        <div class="card">
+
+            <h2>ASSIGN PRACTICE</h2>
+
+
+            <label for="course">
+                Course
+            </label>
+
+            <select id="course">
+
+                <option value="EGE">
+                    EGE
+                </option>
+
+            </select>
+
+
+            <label for="section">
+                Section
+            </label>
+
+            <select id="section">
+
+                <option value="G1">G1</option>
+                <option value="G2">G2</option>
+                <option value="G3">G3</option>
+
+                <option value="R1">R1</option>
+                <option value="R2">R2</option>
+                <option value="R3">R3</option>
+
+                <option value="L1">L1</option>
+                <option value="L2">L2</option>
+                <option value="L3">L3</option>
+
+                <option value="W1">W1</option>
+                <option value="W2">W2</option>
+
+                <option value="S1">S1</option>
+                <option value="S2">S2</option>
+                <option value="S3">S3</option>
+                <option value="S4">S4</option>
+
+            </select>
+
+
+            <label for="student">
+                Student
+            </label>
+
+            <select id="student">
+
+                <option value="">
+                    Loading students...
+                </option>
+
+            </select>
+
+
+            <div
+                id="assignStatus"
+                class="status"
+            ></div>
+
+        </div>
+
+
+
+        <!-- ======================================
+             ДОБАВЛЕНИЕ НОВОГО TASK
+        ======================================= -->
+
+        <div class="card">
+
+            <h2>ADD NEW TASK</h2>
+
+
+            <label for="newTaskId">
+                Task ID
+            </label>
+
+            <input
+                id="newTaskId"
+                type="text"
+                placeholder="FE4F79"
+            >
+
+
+            <label for="newTitle">
+                Title
+            </label>
+
+            <input
+                id="newTitle"
+                type="text"
+                placeholder="A hungry wolf"
+            >
+
+
+            <label for="newUrl">
+                URL
+            </label>
+
+            <input
+                id="newUrl"
+                type="text"
+                placeholder="https://..."
+            >
+
+
+            <button
+                class="button"
+                onclick="addTask()"
+            >
+                ADD TASK
+            </button>
+
+
+            <div class="small-note">
+                Course and Section are taken from the selectors on the left.
+            </div>
+
+
+            <div
+                id="addStatus"
+                class="status"
+            ></div>
+
+        </div>
+
+
+
+        <!-- ======================================
+             КАТАЛОГ TASKS
+        ======================================= -->
+
+        <div class="card wide">
+
+            <h2>AVAILABLE PRACTICE</h2>
+
+            <div
+                id="tasks"
+                class="tasks"
+            >
+
+                <div class="empty">
+                    Loading tasks...
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+    const API_URL =
+        "https://script.google.com/macros/s/AKfycbxxTEqdc_eAgBYhxPlAxGdD4ufwliTjwp3Rvc_leSns3wG6tnS1KKlCQABN2OYHZP1nTQ/exec";
+
+
+    const courseSelect =
+        document.getElementById("course");
+
+    const sectionSelect =
+        document.getElementById("section");
+
+    const studentSelect =
+        document.getElementById("student");
+
+    const tasksContainer =
+        document.getElementById("tasks");
+
+
+    let assignedTaskIds =
+        new Set();
+
+
+
+    /* =========================================
+       ЗАПУСК
+    ========================================= */
+
+    async function init() {
+
+        await loadStudents();
+
+        await refreshTasks();
+
+    }
+
+
+
+    /* =========================================
+       STUDENTS
+    ========================================= */
+
+    async function loadStudents() {
+
+        const course =
+            courseSelect.value;
+
+
+        studentSelect.innerHTML =
+            '<option value="">Loading...</option>';
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL +
+                    "?action=students" +
+                    "&course=" +
+                    encodeURIComponent(course)
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (data.status !== "success") {
+
+                throw new Error(
+                    data.message || "Student load error"
+                );
+
+            }
+
+
+            studentSelect.innerHTML = "";
+
+
+            if (!data.students.length) {
+
+                studentSelect.innerHTML =
+                    '<option value="">No students</option>';
+
+                return;
+
+            }
+
+
+            data.students.forEach(student => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    student;
+
+                option.textContent =
+                    student;
+
+                studentSelect.appendChild(option);
+
+            });
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            studentSelect.innerHTML =
+                '<option value="">Load error</option>';
+
+        }
+
+    }
+
+
+
+    /* =========================================
+       TASKS + ASSIGNMENTS
+    ========================================= */
+
+    async function refreshTasks() {
+
+        const course =
+            courseSelect.value;
+
+        const section =
+            sectionSelect.value;
+
+        const student =
+            studentSelect.value;
+
+
+        tasksContainer.innerHTML =
+            '<div class="empty">Loading tasks...</div>';
+
+
+        assignedTaskIds =
+            new Set();
+
+
+        try {
+
+            /* весь каталог */
+
+            const taskResponse =
+                await fetch(
+                    API_URL +
+                    "?action=tasks" +
+                    "&course=" +
+                    encodeURIComponent(course) +
+                    "&section=" +
+                    encodeURIComponent(section)
+                );
+
+
+            const taskData =
+                await taskResponse.json();
+
+
+            if (taskData.status !== "success") {
+
+                throw new Error(
+                    taskData.message ||
+                    "Task load error"
+                );
+
+            }
+
+
+            /* назначения */
+
+            if (student) {
+
+                const assignmentResponse =
+                    await fetch(
+                        API_URL +
+                        "?action=assignments" +
+                        "&student=" +
+                        encodeURIComponent(student) +
+                        "&course=" +
+                        encodeURIComponent(course) +
+                        "&section=" +
+                        encodeURIComponent(section)
+                    );
+
+
+                const assignmentData =
+                    await assignmentResponse.json();
+
+
+                if (
+                    assignmentData.status ===
+                    "success"
+                ) {
+
+                    assignmentData
+                        .assignments
+                        .forEach(task => {
+
+                            assignedTaskIds.add(
+                                task.taskId
+                            );
+
+                        });
+
+                }
+
+            }
+
+
+            renderTasks(
+                taskData.tasks
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            tasksContainer.innerHTML =
+                '<div class="empty">Could not load tasks.</div>';
+
+        }
+
+    }
+
+
+
+    /* =========================================
+       ОТОБРАЖЕНИЕ TASKS
+    ========================================= */
+
+    function renderTasks(tasks) {
+
+        tasksContainer.innerHTML = "";
+
+
+        if (!tasks.length) {
+
+            tasksContainer.innerHTML =
+                '<div class="empty">No tasks in this section yet.</div>';
+
+            return;
+
+        }
+
+
+        tasks.forEach(task => {
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "task-row";
+
+
+            const checkbox =
+                document.createElement("input");
+
+            checkbox.type =
+                "checkbox";
+
+            checkbox.checked =
+                assignedTaskIds.has(
+                    task.taskId
+                );
+
+
+            checkbox.addEventListener(
+                "change",
+                async function () {
+
+                    await changeAssignment(
+                        task.taskId,
+                        checkbox.checked,
+                        checkbox
+                    );
+
+                }
+            );
+
+
+            const info =
+                document.createElement("div");
+
+            info.className =
+                "task-info";
+
+
+            const id =
+                document.createElement("div");
+
+            id.className =
+                "task-id";
+
+            id.textContent =
+                task.taskId;
+
+
+            const title =
+                document.createElement("div");
+
+            title.className =
+                "task-title";
+
+            title.textContent =
+                task.title;
+
+
+            info.appendChild(id);
+            info.appendChild(title);
+
+
+            row.appendChild(
+                checkbox
+            );
+
+            row.appendChild(
+                info
+            );
+
+
+            tasksContainer.appendChild(
+                row
+            );
+
+        });
+
+    }
+
+
+
+    /* =========================================
+       НАЗНАЧИТЬ / СНЯТЬ
+    ========================================= */
+
+    async function changeAssignment(
+        taskId,
+        shouldAssign,
+        checkbox
+    ) {
+
+        const student =
+            studentSelect.value;
+
+        const course =
+            courseSelect.value;
+
+        const section =
+            sectionSelect.value;
+
+        const status =
+            document.getElementById(
+                "assignStatus"
+            );
+
+
+        if (!student) {
+
+            alert(
+                "Please choose a student."
+            );
+
+            checkbox.checked =
+                !shouldAssign;
+
+            return;
+
+        }
+
+
+        checkbox.disabled =
+            true;
+
+
+        status.className =
+            "status";
+
+        status.textContent =
+            "Saving...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+
+                        body: JSON.stringify({
+
+                            token:
+                                getTeacherToken(),
+
+                            action:
+                                shouldAssign
+                                ? "assignTask"
+                                : "removeAssignment",
+
+                            student:
+                                student,
+
+                            course:
+                                course,
+
+                            section:
+                                section,
+
+                            taskId:
+                                taskId
+
+                        })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (data.status !== "success") {
+
+                throw new Error(
+                    data.message ||
+                    "Save error"
+                );
+
+            }
+
+
+            status.className =
+                "status success";
+
+
+            status.textContent =
+                shouldAssign
+                ? taskId + " assigned to " + student
+                : taskId + " removed from " + student;
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            checkbox.checked =
+                !shouldAssign;
+
+
+            status.className =
+                "status error";
+
+
+            status.textContent =
+                "Could not save assignment.";
+
+        }
+
+
+        checkbox.disabled =
+            false;
+
+    }
+
+
+
+    /* =========================================
+       ADD TASK
+    ========================================= */
+
+    async function addTask() {
+
+        const taskId =
+            document
+                .getElementById("newTaskId")
+                .value
+                .trim();
+
+        const title =
+            document
+                .getElementById("newTitle")
+                .value
+                .trim();
+
+        const url =
+            document
+                .getElementById("newUrl")
+                .value
+                .trim();
+
+        const course =
+            courseSelect.value;
+
+        const section =
+            sectionSelect.value;
+
+        const status =
+            document.getElementById(
+                "addStatus"
+            );
+
+
+        if (
+            !taskId ||
+            !title ||
+            !url
+        ) {
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Fill in Task ID, Title and URL.";
+
+            return;
+
+        }
+
+
+        status.className =
+            "status";
+
+        status.textContent =
+            "Adding task...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+
+                        body: JSON.stringify({
+
+                            token:
+                                getTeacherToken(),
+
+                            action:
+                                "addTask",
+
+                            taskId:
+                                taskId,
+
+                            course:
+                                course,
+
+                            section:
+                                section,
+
+                            title:
+                                title,
+
+                            url:
+                                url
+
+                        })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                data.status !==
+                "success"
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "Add task error"
+                );
+
+            }
+
+
+            status.className =
+                "status success";
+
+
+            status.textContent =
+                data.mode === "updated"
+                ? "Task updated."
+                : "Task added.";
+
+
+            document
+                .getElementById("newTaskId")
+                .value = "";
+
+            document
+                .getElementById("newTitle")
+                .value = "";
+
+            document
+                .getElementById("newUrl")
+                .value = "";
+
+
+            await refreshTasks();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Could not add task.";
+
+        }
+
+    }
+
+
+
+    /* =========================================
+       EVENTS
+    ========================================= */
+
+    courseSelect.addEventListener(
+        "change",
+        async function () {
+
+            await loadStudents();
+
+            await refreshTasks();
+
+        }
+    );
+
+
+    sectionSelect.addEventListener(
+        "change",
+        refreshTasks
+    );
+
+
+    studentSelect.addEventListener(
+        "change",
+        refreshTasks
+    );
+
+
+
+
+    /* =========================================
+       TEACHER AUTH
+    ========================================= */
+
+    function getTeacherToken() {
+        return localStorage.getItem(
+            "theSpaceTeacherToken"
+        ) || "";
+    }
+
+
+    function saveTeacherToken(token) {
+        localStorage.setItem(
+            "theSpaceTeacherToken",
+            token
+        );
+    }
+
+
+    function clearTeacherToken() {
+        localStorage.removeItem(
+            "theSpaceTeacherToken"
+        );
+    }
+
+
+    function openTeacherPanel() {
+        document
+            .getElementById("loginScreen")
+            .classList
+            .add("hidden");
+
+        document
+            .getElementById("logoutButton")
+            .classList
+            .remove("hidden");
+    }
+
+
+    function closeTeacherPanel() {
+        document
+            .getElementById("loginScreen")
+            .classList
+            .remove("hidden");
+
+        document
+            .getElementById("logoutButton")
+            .classList
+            .add("hidden");
+    }
+
+
+    async function teacherLogin() {
+
+        const password =
+            document
+                .getElementById("teacherPassword")
+                .value
+                .trim();
+
+        const status =
+            document.getElementById("loginStatus");
+
+
+        if (!/^[A-Za-z0-9]{4}$/.test(password)) {
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Enter exactly 4 letters or digits.";
+
+            return;
+        }
+
+
+        status.className =
+            "status";
+
+        status.textContent =
+            "Signing in...";
+
+
+        try {
+
+            const response =
+                await fetch(API_URL, {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body: JSON.stringify({
+                        action: "teacherLogin",
+                        password: password
+                    })
+                });
+
+
+            const data =
+                await response.json();
+
+
+            if (data.status !== "success") {
+                throw new Error(
+                    data.message || "Wrong password"
+                );
+            }
+
+
+            saveTeacherToken(
+                data.token
+            );
+
+            document
+                .getElementById("teacherPassword")
+                .value = "";
+
+            status.textContent = "";
+
+            openTeacherPanel();
+
+            await init();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Wrong password.";
+        }
+    }
+
+
+    async function checkSavedLogin() {
+
+        const token =
+            getTeacherToken();
+
+
+        if (!token) {
+            closeTeacherPanel();
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(API_URL, {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body: JSON.stringify({
+                        action: "checkTeacher",
+                        token: token
+                    })
+                });
+
+
+            const data =
+                await response.json();
+
+
+            if (data.status === "success") {
+
+                openTeacherPanel();
+
+                await init();
+
+                return;
+            }
+
+
+        } catch (error) {
+            console.error(error);
+        }
+
+
+        clearTeacherToken();
+        closeTeacherPanel();
+    }
+
+
+    async function requestReset() {
+
+        const status =
+            document.getElementById("loginStatus");
+
+
+        status.className =
+            "status";
+
+        status.textContent =
+            "Sending reset code...";
+
+
+        try {
+
+            const response =
+                await fetch(API_URL, {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body: JSON.stringify({
+                        action: "requestReset"
+                    })
+                });
+
+
+            const data =
+                await response.json();
+
+
+            if (data.status !== "success") {
+                throw new Error(
+                    data.message || "Reset error"
+                );
+            }
+
+
+            document
+                .getElementById("loginStep")
+                .classList
+                .add("hidden");
+
+            document
+                .getElementById("resetStep")
+                .classList
+                .remove("hidden");
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Could not send reset code.";
+        }
+    }
+
+
+    async function resetPassword() {
+
+        const code =
+            document
+                .getElementById("resetCode")
+                .value
+                .trim();
+
+        const newPassword =
+            document
+                .getElementById("newPassword")
+                .value
+                .trim();
+
+        const status =
+            document.getElementById("resetStatus");
+
+
+        if (!/^[A-Za-z0-9]{4}$/.test(newPassword)) {
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Password must contain exactly 4 letters or digits.";
+
+            return;
+        }
+
+
+        if (!/^\d{6}$/.test(code)) {
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Enter the 6-digit reset code.";
+
+            return;
+        }
+
+
+        status.className =
+            "status";
+
+        status.textContent =
+            "Saving password...";
+
+
+        try {
+
+            const response =
+                await fetch(API_URL, {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body: JSON.stringify({
+                        action: "resetPassword",
+                        code: code,
+                        newPassword: newPassword
+                    })
+                });
+
+
+            const data =
+                await response.json();
+
+
+            if (data.status !== "success") {
+                throw new Error(
+                    data.message || "Reset error"
+                );
+            }
+
+
+            clearTeacherToken();
+
+            document
+                .getElementById("resetCode")
+                .value = "";
+
+            document
+                .getElementById("newPassword")
+                .value = "";
+
+            showLogin();
+
+
+            const loginStatus =
+                document.getElementById("loginStatus");
+
+            loginStatus.className =
+                "status success";
+
+            loginStatus.textContent =
+                "Password changed. Sign in with your new password.";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            status.className =
+                "status error";
+
+            status.textContent =
+                "Wrong or expired reset code.";
+        }
+    }
+
+
+    function showLogin() {
+
+        document
+            .getElementById("resetStep")
+            .classList
+            .add("hidden");
+
+        document
+            .getElementById("loginStep")
+            .classList
+            .remove("hidden");
+
+        document
+            .getElementById("resetStatus")
+            .textContent = "";
+    }
+
+
+    function logoutTeacher() {
+
+        clearTeacherToken();
+
+        document
+            .getElementById("loginStatus")
+            .textContent = "";
+
+        showLogin();
+        closeTeacherPanel();
+    }
+
+
+    document
+        .getElementById("teacherPassword")
+        .addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+                    teacherLogin();
+                }
+            }
+        );
+
+
+    checkSavedLogin();
+
+
+</script>
+
+
+</body>
+
+</html>
