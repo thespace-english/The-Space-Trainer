@@ -1,0 +1,626 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: 'Nunito', sans-serif;
+
+    color: #173D43;
+
+    background:
+        radial-gradient(
+            circle at 11% 88%,
+            rgba(87, 209, 198, 0.26) 0%,
+            rgba(87, 209, 198, 0.10) 28%,
+            transparent 48%
+        ),
+        radial-gradient(
+            circle at 74% 10%,
+            rgba(116, 205, 195, 0.10) 0%,
+            transparent 42%
+        ),
+        linear-gradient(
+            135deg,
+            #F7FCFA 0%,
+            #EDF8F5 52%,
+            #E4F5F1 100%
+        );
+
+    overflow-x: hidden;
+
+    position: relative;
+}
+
+
+/* ==================================================
+   ВЕРХНЯЯ ДУГА
+================================================== */
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    width: 900px;
+    height: 900px;
+
+    top: -680px;
+    right: -290px;
+
+    border-radius: 50%;
+
+    border:
+        28px solid rgba(255,255,255,0.12);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.92),
+        0 0 0 1px rgba(255,255,255,0.35),
+        0 12px 34px rgba(100,160,151,0.05);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* ==================================================
+   БОЛЬШОЙ НИЖНИЙ КРУГ
+================================================== */
+
+body::after {
+    content: "";
+
+    position: fixed;
+
+    width: 285px;
+    height: 285px;
+
+    left: -45px;
+    bottom: -140px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.17),
+            rgba(255,255,255,0.04)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.76);
+
+    box-shadow:
+        inset 2px 2px 8px rgba(255,255,255,0.30),
+        inset -3px -3px 10px rgba(82,165,154,0.04);
+
+    backdrop-filter: blur(3px);
+
+    -webkit-backdrop-filter: blur(3px);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* ==================================================
+   ОСНОВНОЙ КОНТЕЙНЕР
+================================================== */
+
+.container {
+    width: 100%;
+    max-width: 860px;
+
+    margin: 0 auto;
+
+    padding: 120px 24px 130px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* ==================================================
+   СРЕДНИЙ НИЖНИЙ КРУГ
+================================================== */
+
+.container::before {
+    content: "";
+
+    position: fixed;
+
+    width: 105px;
+    height: 105px;
+
+    left: 42px;
+    bottom: 105px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.22),
+            rgba(255,255,255,0.05)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.76);
+
+    box-shadow:
+        inset 2px 2px 6px rgba(255,255,255,0.28);
+
+    backdrop-filter: blur(2px);
+
+    -webkit-backdrop-filter: blur(2px);
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+/* ==================================================
+   МАЛЕНЬКИЙ НИЖНИЙ КРУГ
+================================================== */
+
+.container::after {
+    content: "";
+
+    position: fixed;
+
+    width: 70px;
+    height: 70px;
+
+    left: 200px;
+    bottom: 22px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.27),
+            rgba(255,255,255,0.07)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.80);
+
+    box-shadow:
+        inset 2px 2px 6px rgba(255,255,255,0.30);
+
+    backdrop-filter: blur(2px);
+
+    -webkit-backdrop-filter: blur(2px);
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+/* ==================================================
+   HEADER
+================================================== */
+
+header {
+    text-align: center;
+
+    margin-bottom: 42px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* THE SPACE */
+
+.logo {
+    margin: 0;
+
+    font-size: 68px;
+    line-height: 1;
+
+    font-weight: 800;
+
+    letter-spacing: 8px;
+
+    color: #138E87;
+
+    text-shadow:
+        0 2px 1px rgba(0,80,76,0.12);
+}
+
+
+/* PROGRAMS */
+
+h1 {
+    margin: 22px 0 0;
+
+    font-size: 26px;
+    line-height: 1;
+
+    font-weight: 700;
+
+    letter-spacing: 12px;
+
+    color: #168F89;
+}
+
+
+/* ==================================================
+   СЕТКА КАРТОЧЕК
+================================================== */
+
+.programs {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px 22px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* ==================================================
+   КАРТОЧКИ — МОЛОЧНОЕ СТЕКЛО
+================================================== */
+
+.card {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 190px;
+
+    padding: 40px 46px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.78) 0%,
+            rgba(255,255,255,0.60) 48%,
+            rgba(247,252,251,0.56) 100%
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.94);
+
+    backdrop-filter:
+        blur(18px)
+        saturate(105%);
+
+    -webkit-backdrop-filter:
+        blur(18px)
+        saturate(105%);
+
+    box-shadow:
+        0 18px 36px rgba(97,155,147,0.14),
+        inset 1px 1px 0 rgba(255,255,255,0.90),
+        inset -1px -1px 0 rgba(116,177,168,0.04);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* мягкий свет внутри стекла */
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 55%;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.18),
+            transparent
+        );
+
+    pointer-events: none;
+}
+
+
+/* очень тонкая внутренняя грань */
+
+.card::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 1px;
+
+    border-radius: 21px;
+
+    border:
+        1px solid rgba(255,255,255,0.20);
+
+    pointer-events: none;
+}
+
+
+.card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 24px 44px rgba(97,155,147,0.18),
+        inset 1px 1px 0 rgba(255,255,255,0.95);
+}
+
+
+/* ==================================================
+   ТЕКСТ В КАРТОЧКАХ
+================================================== */
+
+.card h2 {
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0 0 16px;
+
+    font-size: 24px;
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    color: #138E87;
+}
+
+
+.card p {
+    position: relative;
+
+    z-index: 2;
+
+    margin: 0;
+
+    font-size: 21px;
+    line-height: 1.65;
+
+    font-weight: 500;
+
+    color: #173D43;
+}
+
+
+/* ==================================================
+   LEVELS
+================================================== */
+
+.levels {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 20px;
+}
+
+
+.levels h3 {
+    margin: 0 0 10px;
+
+    font-size: 19px;
+
+    font-weight: 700;
+
+    color: #138E87;
+}
+
+
+.expandable {
+    cursor: pointer;
+}
+
+
+.brand {
+    display: none;
+}
+
+
+/* ==================================================
+   ПЛАНШЕТ
+================================================== */
+
+@media (max-width: 900px) {
+
+    .container {
+        max-width: 760px;
+
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+
+
+    .logo {
+        font-size: 58px;
+    }
+
+
+    h1 {
+        font-size: 23px;
+
+        letter-spacing: 10px;
+    }
+
+
+    .card {
+        padding: 34px 36px;
+    }
+
+
+    .card h2 {
+        font-size: 22px;
+    }
+
+
+    .card p {
+        font-size: 19px;
+    }
+}
+
+
+/* ==================================================
+   ТЕЛЕФОН
+================================================== */
+
+@media (max-width: 700px) {
+
+    .container {
+        padding:
+            95px
+            18px
+            120px;
+    }
+
+
+    header {
+        margin-bottom: 30px;
+    }
+
+
+    .logo {
+        font-size: 39px;
+
+        letter-spacing: 5px;
+    }
+
+
+    h1 {
+        margin-top: 16px;
+
+        font-size: 17px;
+
+        letter-spacing: 7px;
+    }
+
+
+    .programs {
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+    }
+
+
+    .card {
+        min-height: auto;
+
+        padding: 27px 28px;
+
+        border-radius: 19px;
+    }
+
+
+    .card h2 {
+        margin-bottom: 11px;
+
+        font-size: 20px;
+    }
+
+
+    .card p {
+        font-size: 17px;
+
+        line-height: 1.6;
+    }
+
+
+    /* дуга */
+
+    body::before {
+        width: 520px;
+        height: 520px;
+
+        top: -405px;
+        right: -220px;
+
+        border-width: 20px;
+    }
+
+
+    /* большой круг */
+
+    body::after {
+        width: 210px;
+        height: 210px;
+
+        left: -50px;
+        bottom: -105px;
+    }
+
+
+    /* средний круг */
+
+    .container::before {
+        width: 76px;
+        height: 76px;
+
+        left: 25px;
+        bottom: 85px;
+    }
+
+
+    /* маленький круг */
+
+    .container::after {
+        width: 52px;
+        height: 52px;
+
+        left: 145px;
+        bottom: 18px;
+    }
+}
+
+/* логотип в правом нижнем углу */
+
+.corner-logo {
+    position: fixed;
+
+    right: 28px;
+    bottom: 22px;
+
+    width: 180px;
+    height: auto;
+
+    z-index: 10;
+
+    object-fit: contain;
+}
+
+
+@media (max-width: 700px) {
+
+    .corner-logo {
+        right: 15px;
+        bottom: 15px;
+
+        width: 125px;
+    }
+
+}

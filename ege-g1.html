@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>The Space — EGE G1</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /* =========================================
+           G1 — только для этой страницы
+        ========================================= */
+
+
+        .practice-area {
+            width: 100%;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+
+        /* выбор ученика */
+
+        .student-box {
+            max-width: 520px;
+            margin: 0 auto 30px;
+            padding: 28px 32px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.78),
+                    rgba(255,255,255,0.58)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.94);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 18px 36px rgba(97,155,147,0.14);
+
+            position: relative;
+            z-index: 3;
+        }
+
+
+        .student-box label {
+            display: block;
+
+            margin-bottom: 12px;
+
+            font-size: 18px;
+            font-weight: 800;
+
+            color: #138E87;
+        }
+
+
+        .student-select {
+            width: 100%;
+
+            padding: 15px 18px;
+
+            border-radius: 14px;
+
+            border:
+                1px solid rgba(122,160,149,0.25);
+
+            background:
+                rgba(255,255,255,0.72);
+
+            color: #173D43;
+
+            font-family: 'Nunito', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+
+            outline: none;
+
+            cursor: pointer;
+        }
+
+
+        .student-select:focus {
+            border-color: rgba(19,142,135,0.55);
+
+            box-shadow:
+                0 0 0 3px rgba(19,142,135,0.08);
+        }
+
+
+        /* заголовок назначений */
+
+        .practice-title {
+            display: none;
+
+            margin: 12px 0 22px;
+
+            text-align: center;
+
+            font-size: 18px;
+            font-weight: 800;
+
+            letter-spacing: 4px;
+
+            color: #138E87;
+        }
+
+
+        /* список назначенных заданий */
+
+        .assignment-list {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px 22px;
+        }
+
+
+        /* карточка задания */
+
+        .assignment-card {
+            min-height: 150px;
+
+            padding: 32px 38px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.78),
+                    rgba(255,255,255,0.60)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.94);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 18px 36px rgba(97,155,147,0.14);
+
+            cursor: pointer;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+
+        .assignment-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 24px 44px rgba(97,155,147,0.18);
+        }
+
+
+        .task-id {
+            margin-bottom: 12px;
+
+            font-size: 23px;
+            font-weight: 800;
+
+            color: #138E87;
+        }
+
+
+        .task-title {
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: 500;
+
+            color: #173D43;
+        }
+
+
+        /* служебные сообщения */
+
+        .message {
+            padding: 25px;
+
+            text-align: center;
+
+            font-size: 18px;
+
+            color: #536F68;
+        }
+
+
+        .loading {
+            display: none;
+        }
+
+
+        @media (max-width: 700px) {
+
+            .student-box {
+                padding: 22px;
+            }
+
+
+            .assignment-list {
+                grid-template-columns: 1fr;
+            }
+
+
+            .assignment-card {
+                min-height: auto;
+
+                padding: 26px 28px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="container">
+
+
+        <header>
+
+            <div class="logo">
+                THE SPACE
+            </div>
+
+            <h1>EGE · G1</h1>
+
+        </header>
+
+
+
+        <main class="practice-area">
+
+
+            <!-- ВЫБОР УЧЕНИКА -->
+
+            <div class="student-box">
+
+                <label for="studentSelect">
+                    CHOOSE YOUR NAME
+                </label>
+
+                <select
+                    id="studentSelect"
+                    class="student-select"
+                >
+
+                    <option value="">
+                        Select your name
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- ЗАГОЛОВОК -->
+
+            <div
+                id="practiceTitle"
+                class="practice-title"
+            >
+                YOUR PRACTICE
+            </div>
+
+
+
+            <!-- ЗАГРУЗКА -->
+
+            <div
+                id="loading"
+                class="message loading"
+            >
+                Loading...
+            </div>
+
+
+
+            <!-- ЗАДАНИЯ -->
+
+            <div
+                id="assignmentList"
+                class="assignment-list"
+            ></div>
+
+
+
+            <!-- СООБЩЕНИЕ -->
+
+            <div
+                id="message"
+                class="message"
+            >
+                Choose your name to see your practice.
+            </div>
+
+
+        </main>
+
+
+    </div>
+
+
+
+    <img
+        src="logo.png"
+        class="corner-logo"
+        alt="The Space English Online"
+    >
+
+
+
+    <script>
+
+        /* =========================================
+           THE SPACE API
+        ========================================= */
+
+        const API_URL =
+            "https://script.google.com/macros/s/AKfycbxxTEqdc_eAgBYhxPlAxGdD4ufwliTjwp3Rvc_leSns3wG6tnS1KKlCQABN2OYHZP1nTQ/exec";
+
+
+        const COURSE = "EGE";
+        const SECTION = "G1";
+
+
+        const studentSelect =
+            document.getElementById("studentSelect");
+
+        const assignmentList =
+            document.getElementById("assignmentList");
+
+        const message =
+            document.getElementById("message");
+
+        const loading =
+            document.getElementById("loading");
+
+        const practiceTitle =
+            document.getElementById("practiceTitle");
+
+
+
+        /* =========================================
+           ЗАГРУЖАЕМ УЧЕНИКОВ
+        ========================================= */
+
+        async function loadStudents() {
+
+            try {
+
+                const url =
+                    API_URL +
+                    "?action=students" +
+                    "&course=" +
+                    encodeURIComponent(COURSE);
+
+
+                const response =
+                    await fetch(url);
+
+
+                if (!response.ok) {
+                    throw new Error("Could not load students");
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    data.status !== "success" ||
+                    !Array.isArray(data.students)
+                ) {
+                    throw new Error("Invalid student data");
+                }
+
+
+                data.students.forEach(student => {
+
+                    const option =
+                        document.createElement("option");
+
+                    option.value = student;
+                    option.textContent = student;
+
+                    studentSelect.appendChild(option);
+
+                });
+
+
+                /* запоминаем ученика на этом устройстве */
+
+                const savedStudent =
+                    localStorage.getItem("theSpaceStudent");
+
+
+                if (
+                    savedStudent &&
+                    data.students.includes(savedStudent)
+                ) {
+
+                    studentSelect.value =
+                        savedStudent;
+
+                    loadAssignments(savedStudent);
+
+                }
+
+
+            } catch (error) {
+
+                message.textContent =
+                    "Could not load the student list.";
+
+                console.error(error);
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           ПРИ ВЫБОРЕ ИМЕНИ
+        ========================================= */
+
+        studentSelect.addEventListener(
+            "change",
+            function () {
+
+                const student =
+                    studentSelect.value;
+
+
+                assignmentList.innerHTML = "";
+
+                practiceTitle.style.display =
+                    "none";
+
+
+                if (!student) {
+
+                    message.style.display =
+                        "block";
+
+                    message.textContent =
+                        "Choose your name to see your practice.";
+
+                    return;
+
+                }
+
+
+                localStorage.setItem(
+                    "theSpaceStudent",
+                    student
+                );
+
+
+                loadAssignments(student);
+
+            }
+        );
+
+
+
+        /* =========================================
+           ЗАГРУЖАЕМ НАЗНАЧЕНИЯ
+        ========================================= */
+
+        async function loadAssignments(student) {
+
+            try {
+
+                assignmentList.innerHTML = "";
+
+                message.style.display =
+                    "none";
+
+                practiceTitle.style.display =
+                    "none";
+
+                loading.style.display =
+                    "block";
+
+
+                const url =
+                    API_URL +
+                    "?action=assignments" +
+                    "&student=" +
+                    encodeURIComponent(student) +
+                    "&course=" +
+                    encodeURIComponent(COURSE) +
+                    "&section=" +
+                    encodeURIComponent(SECTION);
+
+
+                const response =
+                    await fetch(url);
+
+
+                if (!response.ok) {
+                    throw new Error("Could not load assignments");
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                loading.style.display =
+                    "none";
+
+
+                if (
+                    data.status !== "success" ||
+                    !Array.isArray(data.assignments)
+                ) {
+                    throw new Error("Invalid assignment data");
+                }
+
+
+
+                /* НИЧЕГО НЕ НАЗНАЧЕНО */
+
+                if (data.assignments.length === 0) {
+
+                    message.style.display =
+                        "block";
+
+                    message.textContent =
+                        "No practice assigned yet.";
+
+                    return;
+
+                }
+
+
+
+                /* ЕСТЬ ЗАДАНИЯ */
+
+                practiceTitle.style.display =
+                    "block";
+
+
+                data.assignments.forEach(task => {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "assignment-card";
+
+
+                    const taskId =
+                        document.createElement("div");
+
+                    taskId.className =
+                        "task-id";
+
+                    taskId.textContent =
+                        task.taskId;
+
+
+
+                    const title =
+                        document.createElement("div");
+
+                    title.className =
+                        "task-title";
+
+                    title.textContent =
+                        task.title;
+
+
+
+                    card.appendChild(taskId);
+
+                    card.appendChild(title);
+
+
+
+                    card.addEventListener(
+    "click",
+    function () {
+
+        const separator =
+            task.url.includes("?") ? "&" : "?";
+
+        window.location.href =
+            task.url +
+            separator +
+            "student=" +
+            encodeURIComponent(student);
+
+    }
+);
+
+
+                    assignmentList.appendChild(card);
+
+                });
+
+
+            } catch (error) {
+
+                loading.style.display =
+                    "none";
+
+                message.style.display =
+                    "block";
+
+                message.textContent =
+                    "Could not load your practice.";
+
+                console.error(error);
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           СТАРТ
+        ========================================= */
+
+        loadStudents();
+
+    </script>
+
+
+</body>
+
+</html>
