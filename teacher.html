@@ -264,6 +264,37 @@ z-index: 2;
             flex: 1;
         }
 
+        .task-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.task-action-button {
+    padding: 8px 12px;
+
+    border-radius: 10px;
+    border: 1px solid rgba(122,160,149,0.22);
+
+    background: rgba(255,255,255,0.72);
+
+    color: #138E87;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.task-action-button:hover {
+    background: rgba(255,255,255,0.96);
+}
+
+.task-action-button.delete {
+    color: #B45D5D;
+}
+
 
         .task-id {
             font-size: 15px;
@@ -338,6 +369,15 @@ z-index: 2;
 
                 letter-spacing: 5px;
             }
+
+            .task-row {
+    flex-wrap: wrap;
+}
+
+.task-actions {
+    width: 100%;
+    padding-left: 33px;
+}
 
         }
 
@@ -860,7 +900,7 @@ body::after {
 
         <div class="card">
 
-            <h2>ADD NEW TASK</h2>
+            <h2 id="taskFormTitle">ADD NEW TASK</h2>
 
 
             <label for="newTaskId">
@@ -897,11 +937,12 @@ body::after {
 
 
             <button
-                class="button"
-                onclick="addTask()"
-            >
-                ADD TASK
-            </button>
+    id="saveTaskButton"
+    class="button"
+    onclick="addTask()"
+>
+    ADD TASK
+</button>
 
 
             <div class="small-note">
@@ -1182,103 +1223,328 @@ body::after {
 
     function renderTasks(tasks) {
 
-        tasksContainer.innerHTML = "";
+    tasksContainer.innerHTML = "";
 
 
-        if (!tasks.length) {
+    if (!tasks.length) {
 
-            tasksContainer.innerHTML =
-                '<div class="empty">No tasks in this section yet.</div>';
+        tasksContainer.innerHTML =
+            '<div class="empty">No tasks in this section yet.</div>';
 
-            return;
-
-        }
-
-
-        tasks.forEach(task => {
-
-            const row =
-                document.createElement("div");
-
-            row.className =
-                "task-row";
-
-
-            const checkbox =
-                document.createElement("input");
-
-            checkbox.type =
-                "checkbox";
-
-            checkbox.checked =
-                assignedTaskIds.has(
-                    task.taskId
-                );
-
-
-            checkbox.addEventListener(
-                "change",
-                async function () {
-
-                    await changeAssignment(
-                        task.taskId,
-                        checkbox.checked,
-                        checkbox
-                    );
-
-                }
-            );
-
-
-            const info =
-                document.createElement("div");
-
-            info.className =
-                "task-info";
-
-
-            const id =
-                document.createElement("div");
-
-            id.className =
-                "task-id";
-
-            id.textContent =
-                task.taskId;
-
-
-            const title =
-                document.createElement("div");
-
-            title.className =
-                "task-title";
-
-            title.textContent =
-                task.title;
-
-
-            info.appendChild(id);
-            info.appendChild(title);
-
-
-            row.appendChild(
-                checkbox
-            );
-
-            row.appendChild(
-                info
-            );
-
-
-            tasksContainer.appendChild(
-                row
-            );
-
-        });
+        return;
 
     }
 
 
+    tasks.forEach(task => {
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "task-row";
+
+
+        /* CHECKBOX */
+
+        const checkbox =
+            document.createElement("input");
+
+        checkbox.type =
+            "checkbox";
+
+        checkbox.checked =
+            assignedTaskIds.has(
+                task.taskId
+            );
+
+
+        checkbox.addEventListener(
+            "change",
+            async function () {
+
+                await changeAssignment(
+                    task.taskId,
+                    checkbox.checked,
+                    checkbox
+                );
+
+            }
+        );
+
+
+        /* TASK INFO */
+
+        const info =
+            document.createElement("div");
+
+        info.className =
+            "task-info";
+
+
+        const id =
+            document.createElement("div");
+
+        id.className =
+            "task-id";
+
+        id.textContent =
+            task.taskId;
+
+
+        const title =
+            document.createElement("div");
+
+        title.className =
+            "task-title";
+
+        title.textContent =
+            task.title;
+
+
+        info.appendChild(id);
+        info.appendChild(title);
+
+
+        /* EDIT / DELETE */
+
+        const actions =
+            document.createElement("div");
+
+        actions.className =
+            "task-actions";
+
+
+        const editButton =
+            document.createElement("button");
+
+        editButton.type =
+            "button";
+
+        editButton.className =
+            "task-action-button";
+
+        editButton.textContent =
+            "EDIT";
+
+
+        editButton.addEventListener(
+            "click",
+            function () {
+
+                editTask(task);
+
+            }
+        );
+
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.type =
+            "button";
+
+        deleteButton.className =
+            "task-action-button delete";
+
+        deleteButton.textContent =
+            "DELETE";
+
+
+        deleteButton.addEventListener(
+            "click",
+            async function () {
+
+                await deleteTask(task);
+
+            }
+        );
+
+
+        actions.appendChild(
+            editButton
+        );
+
+        actions.appendChild(
+            deleteButton
+        );
+
+
+        row.appendChild(
+            checkbox
+        );
+
+        row.appendChild(
+            info
+        );
+
+        row.appendChild(
+            actions
+        );
+
+
+        tasksContainer.appendChild(
+            row
+        );
+
+    });
+
+}
+
+/* =========================================
+   EDIT TASK
+========================================= */
+
+function editTask(task) {
+
+    document
+        .getElementById("newTaskId")
+        .value = task.taskId;
+
+    document
+        .getElementById("newTitle")
+        .value = task.title;
+
+    document
+        .getElementById("newUrl")
+        .value = task.url;
+
+    document
+        .getElementById("taskFormTitle")
+        .textContent = "EDIT TASK";
+
+    document
+        .getElementById("saveTaskButton")
+        .textContent = "SAVE TASK";
+
+    document
+        .getElementById("newTaskId")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+}
+
+
+/* =========================================
+   DELETE TASK
+========================================= */
+
+async function deleteTask(task) {
+
+    const confirmed =
+        confirm(
+            "Delete " +
+            task.taskId +
+            " — " +
+            task.title +
+            "?"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    const status =
+        document.getElementById("addStatus");
+
+    status.className = "status";
+    status.textContent = "Deleting task...";
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body: JSON.stringify({
+
+                        token:
+                            getTeacherToken(),
+
+                        action:
+                            "deleteTask",
+
+                        taskId:
+                            task.taskId,
+
+                        course:
+                            task.course,
+
+                        section:
+                            task.section
+
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (data.status !== "success") {
+            throw new Error(
+                data.message ||
+                "Delete error"
+            );
+        }
+
+        status.className =
+            "status success";
+
+        status.textContent =
+            task.taskId +
+            " deleted.";
+
+        clearTaskForm();
+
+        await refreshTasks();
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.className =
+            "status error";
+
+        status.textContent =
+            "Could not delete task.";
+    }
+}
+
+
+/* =========================================
+   CLEAR TASK FORM
+========================================= */
+
+function clearTaskForm() {
+
+    document
+        .getElementById("newTaskId")
+        .value = "";
+
+    document
+        .getElementById("newTitle")
+        .value = "";
+
+    document
+        .getElementById("newUrl")
+        .value = "";
+
+    document
+        .getElementById("taskFormTitle")
+        .textContent = "ADD NEW TASK";
+
+    document
+        .getElementById("saveTaskButton")
+        .textContent = "ADD TASK";
+}
 
     /* =========================================
        НАЗНАЧИТЬ / СНЯТЬ
@@ -1550,17 +1816,7 @@ body::after {
                 : "Task added.";
 
 
-            document
-                .getElementById("newTaskId")
-                .value = "";
-
-            document
-                .getElementById("newTitle")
-                .value = "";
-
-            document
-                .getElementById("newUrl")
-                .value = "";
+            clearTaskForm();
 
 
             await refreshTasks();
