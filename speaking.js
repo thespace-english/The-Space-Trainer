@@ -1006,24 +1006,6 @@ function speakingBuildS2() {
             "speakingWorkspace"
         );
 
-
-    let imageHTML = "";
-
-    if (SPEAKING_TASK.image) {
-
-        imageHTML = `
-
-            <img
-                class="speaking-image"
-                src="${speakingEscape(
-                    SPEAKING_TASK.image
-                )}"
-                alt=""
-            >
-        `;
-    }
-
-
     const prompts =
         Array.isArray(
             SPEAKING_TASK.prompts
@@ -1031,123 +1013,130 @@ function speakingBuildS2() {
             ? SPEAKING_TASK.prompts
             : [];
 
+    const imageHTML =
+        SPEAKING_TASK.image
+            ? `
+                <div class="speaking-s2-image-card">
+                    <img
+                        class="speaking-s2-image"
+                        src="${speakingEscape(
+                            SPEAKING_TASK.image
+                        )}"
+                        alt="${speakingEscape(
+                            SPEAKING_TASK.imageTitle ||
+                            ""
+                        )}"
+                    >
+                </div>
+            `
+            : "";
 
     const promptsHTML =
-        prompts
-            .map(
-                (prompt, index) => `
+        prompts.map(
+            (prompt, index) => {
 
-                    <div
-                        class="speaking-prompt"
-                    >
+                const text =
+                    typeof prompt ===
+                        "string"
+                        ? prompt
+                        : prompt.text;
 
-                        <div
-                            class="speaking-prompt-number"
-                        >
-                            QUESTION ${index + 1}
-                        </div>
+                return `
+                    <div class="speaking-s2-prompt">
+                        <span class="speaking-s2-number">
+                            ${index + 1}
+                        </span>
 
-                        <div
-                            class="speaking-prompt-text"
-                        >
-                            ${speakingEscape(
-                                typeof prompt ===
-                                    "string"
-                                    ? prompt
-                                    : prompt.text
-                            )}
-                        </div>
-
+                        <span>
+                            ${speakingEscape(text)}
+                        </span>
                     </div>
-                `
-            )
-            .join("");
-
+                `;
+            }
+        ).join("");
 
     workspace.innerHTML = `
 
         <div class="speaking-layout">
 
             <section
-                class="speaking-main"
+                class="speaking-main speaking-s2-main"
             >
 
-                <h2
-                    class="speaking-content-title"
-                >
+                <h2 class="speaking-content-title">
                     Task 2
                 </h2>
 
-                ${imageHTML}
+                <div class="speaking-s2-content">
 
-                <div>
-                    ${promptsHTML}
+                    <div class="speaking-s2-task">
+
+                        <div class="speaking-s2-task-text">
+                            ${SPEAKING_TASK.taskText || ""}
+                        </div>
+
+                        <div class="speaking-s2-prompts">
+                            ${promptsHTML}
+                        </div>
+
+                        <div class="speaking-s2-final-line">
+                            ${speakingEscape(
+                                SPEAKING_TASK.finalLine ||
+                                "You have 20 seconds to ask each question."
+                            )}
+                        </div>
+
+                    </div>
+
+                    ${imageHTML}
+
                 </div>
 
             </section>
 
 
-            <section
-                class="speaking-side"
-            >
+            <section class="speaking-side">
+
+                <div class="speaking-side-title">
+                    SPEAKING
+                </div>
 
                 ${speakingTimerHTML(
                     "READY",
                     speakingGetPreparationTime()
                 )}
 
-                <div
-                    id="speakingControls"
-                >
+                <div id="speakingControls">
 
-                    <div
-                        class="speaking-side-title"
-                    >
-                        CHOOSE PRACTICE MODE
-                    </div>
+                    <div class="speaking-mode-grid">
 
-                    <div
-                        class="speaking-mode-grid"
-                    >
-
-                        <div
+                        <button
                             id="speakingModeAudio"
                             class="speaking-mode-card"
+                            type="button"
                         >
-
-                            <div
-                                class="speaking-mode-name"
-                            >
+                            <div class="speaking-mode-name">
                                 SPEAK
                             </div>
 
-                            <div
-                                class="speaking-mode-text"
-                            >
+                            <div class="speaking-mode-text">
                                 Record four questions
                             </div>
+                        </button>
 
-                        </div>
-
-
-                        <div
+                        <button
                             id="speakingModeText"
                             class="speaking-mode-card"
+                            type="button"
                         >
-
-                            <div
-                                class="speaking-mode-name"
-                            >
+                            <div class="speaking-mode-name">
                                 TYPE
                             </div>
 
-                            <div
-                                class="speaking-mode-text"
-                            >
+                            <div class="speaking-mode-text">
                                 Write four questions
                             </div>
-
-                        </div>
+                        </button>
 
                     </div>
 
@@ -1163,10 +1152,23 @@ function speakingBuildS2() {
         "speakingModeAudio"
     ).addEventListener(
         "click",
-        () => {
+        async () => {
 
             speakingChosenMode =
                 "audio";
+
+            try {
+                await speakingGetMicrophone();
+            } catch (error) {
+
+                alert(
+                    "Microphone access is required."
+                );
+
+                console.error(error);
+
+                return;
+            }
 
             speakingStartS2Preparation();
         }
@@ -1188,9 +1190,16 @@ function speakingBuildS2() {
 }
 
 
+/* ---------------------------------------------------------
+   S2 AUDIO — PREPARATION
+--------------------------------------------------------- */
+
 function speakingStartS2Preparation() {
 
     speakingCurrentPart = 0;
+
+    speakingPhase =
+        "preparation";
 
     const controls =
         document.getElementById(
@@ -1202,18 +1211,38 @@ function speakingStartS2Preparation() {
         <div class="speaking-phase">
             PREPARATION
         </div>
+
+        <button
+            id="speakingSkipS2Prep"
+            class="speaking-button secondary"
+            type="button"
+        >
+            START QUESTIONS NOW
+        </button>
     `;
+
+
+    document.getElementById(
+        "speakingSkipS2Prep"
+    ).addEventListener(
+        "click",
+        speakingStartS2Ready
+    );
 
 
     speakingStartTimer(
         speakingGetPreparationTime(),
         "PREPARATION",
-        speakingStartNextS2AudioPart
+        speakingStartS2Ready
     );
 }
 
 
-async function speakingStartNextS2AudioPart() {
+/* ---------------------------------------------------------
+   S2 — 3 SECOND READY
+--------------------------------------------------------- */
+
+function speakingStartS2Ready() {
 
     speakingStopTimer();
 
@@ -1226,7 +1255,11 @@ async function speakingStartNextS2AudioPart() {
         prompts.length
     ) {
 
+        speakingPhase =
+            "review";
+
         speakingShowMultiReview();
+
         return;
     }
 
@@ -1237,7 +1270,66 @@ async function speakingStartNextS2AudioPart() {
         ];
 
     const promptText =
-        typeof prompt === "string"
+        typeof prompt ===
+            "string"
+            ? prompt
+            : prompt.text;
+
+
+    speakingShowS2CurrentPrompt(
+        promptText
+    );
+
+
+    const controls =
+        document.getElementById(
+            "speakingControls"
+        );
+
+
+    controls.innerHTML = `
+
+        <div class="speaking-phase">
+            QUESTION ${speakingCurrentPart + 1}
+        </div>
+
+        <div class="speaking-s2-current-question">
+            ${speakingEscape(
+                promptText
+            )}
+        </div>
+    `;
+
+
+    speakingStartTimer(
+        3,
+        "GET READY",
+        speakingStartS2Recording
+    );
+}
+
+
+/* ---------------------------------------------------------
+   S2 — RECORD 20 SEC
+--------------------------------------------------------- */
+
+async function speakingStartS2Recording() {
+
+    speakingStopTimer();
+
+    speakingBeep();
+
+    const prompts =
+        SPEAKING_TASK.prompts || [];
+
+    const prompt =
+        prompts[
+            speakingCurrentPart
+        ];
+
+    const promptText =
+        typeof prompt ===
+            "string"
             ? prompt
             : prompt.text;
 
@@ -1251,46 +1343,22 @@ async function speakingStartNextS2AudioPart() {
     controls.innerHTML = `
 
         <div class="speaking-phase">
-            QUESTION
-            ${speakingCurrentPart + 1}
-            OF ${prompts.length}
+            QUESTION ${speakingCurrentPart + 1}
         </div>
 
-        <div
-            class="speaking-prompt active"
-        >
-
-            <div
-                class="speaking-prompt-text"
-            >
-                ${speakingEscape(
-                    promptText
-                )}
-            </div>
-
+        <div class="speaking-s2-current-question">
+            ${speakingEscape(
+                promptText
+            )}
         </div>
 
         ${speakingRecordingHTML()}
-
-        <button
-            id="speakingFinishPart"
-            class="speaking-button"
-            type="button"
-        >
-            NEXT
-        </button>
     `;
 
 
     try {
 
         await speakingStartRecording();
-
-        document.getElementById(
-            "speakingRecording"
-        ).classList.add(
-            "active"
-        );
 
     } catch (error) {
 
@@ -1304,12 +1372,16 @@ async function speakingStartNextS2AudioPart() {
     }
 
 
-    document.getElementById(
-        "speakingFinishPart"
-    ).addEventListener(
-        "click",
-        speakingFinishS2Part
-    );
+    const recordingBox =
+        document.getElementById(
+            "speakingRecording"
+        );
+
+    if (recordingBox) {
+        recordingBox.classList.add(
+            "active"
+        );
+    }
 
 
     speakingStartTimer(
@@ -1319,6 +1391,10 @@ async function speakingStartNextS2AudioPart() {
     );
 }
 
+
+/* ---------------------------------------------------------
+   S2 — SAVE PART AND GO NEXT
+--------------------------------------------------------- */
 
 async function speakingFinishS2Part() {
 
@@ -1333,7 +1409,8 @@ async function speakingFinishS2Part() {
         ];
 
     const promptText =
-        typeof prompt === "string"
+        typeof prompt ===
+            "string"
             ? prompt
             : prompt.text;
 
@@ -1361,9 +1438,88 @@ async function speakingFinishS2Part() {
 
     speakingCurrentPart++;
 
-    speakingStartNextS2AudioPart();
+
+    if (
+        speakingCurrentPart >=
+        prompts.length
+    ) {
+
+        speakingPhase =
+            "review";
+
+        speakingShowMultiReview();
+
+        return;
+    }
+
+
+    speakingStartS2Ready();
 }
 
+
+/* ---------------------------------------------------------
+   S2 — SHOW ONLY CURRENT PROMPT
+   IMAGE STAYS
+--------------------------------------------------------- */
+
+function speakingShowS2CurrentPrompt(
+    promptText
+) {
+
+    const main =
+        document.querySelector(
+            ".speaking-s2-main"
+        );
+
+    if (!main) {
+        return;
+    }
+
+
+    const imageHTML =
+        SPEAKING_TASK.image
+            ? `
+                <div class="speaking-s2-image-card">
+                    <img
+                        class="speaking-s2-image"
+                        src="${speakingEscape(
+                            SPEAKING_TASK.image
+                        )}"
+                        alt=""
+                    >
+                </div>
+            `
+            : "";
+
+
+    main.innerHTML = `
+
+        <div class="speaking-s2-active-layout">
+
+            <div class="speaking-s2-active-question">
+
+                <div class="speaking-s2-active-label">
+                    QUESTION ${speakingCurrentPart + 1}
+                </div>
+
+                <div class="speaking-s2-active-text">
+                    ${speakingEscape(
+                        promptText
+                    )}
+                </div>
+
+            </div>
+
+            ${imageHTML}
+
+        </div>
+    `;
+}
+
+
+/* ---------------------------------------------------------
+   S2 TEXT MODE — NO TIMER
+--------------------------------------------------------- */
 
 function speakingStartS2Text() {
 
@@ -1395,19 +1551,13 @@ function speakingStartS2Text() {
 
                 return `
 
-                    <div
-                        class="speaking-prompt"
-                    >
+                    <div class="speaking-prompt">
 
-                        <div
-                            class="speaking-prompt-number"
-                        >
+                        <div class="speaking-prompt-number">
                             QUESTION ${index + 1}
                         </div>
 
-                        <div
-                            class="speaking-prompt-text"
-                        >
+                        <div class="speaking-prompt-text">
                             ${speakingEscape(
                                 promptText
                             )}
@@ -1440,19 +1590,10 @@ function speakingStartS2Text() {
         "click",
         speakingCollectS2Text
     );
-
-
-    speakingStartTimer(
-        speakingGetAnswerTime(),
-        "WRITING",
-        speakingCollectS2Text
-    );
 }
 
 
 function speakingCollectS2Text() {
-
-    speakingStopTimer();
 
     speakingTextAnswers.length = 0;
 
