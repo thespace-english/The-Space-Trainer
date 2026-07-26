@@ -2477,8 +2477,30 @@ async function speakingPrepareSubmission() {
             );
 
 
-        const data =
-            await response.json();
+        const responseText =
+    await response.text();
+
+console.log(
+    "Speaking server response:",
+    responseText
+);
+
+let data;
+
+try {
+
+    data =
+        JSON.parse(
+            responseText
+        );
+
+} catch (error) {
+
+    throw new Error(
+        "Server response: " +
+        responseText
+    );
+}
 
 
         if (
