@@ -703,6 +703,46 @@ function speakingRecordingHTML() {
     `;
 }
 
+function speakingBeep() {
+
+    try {
+
+        const AudioContextClass =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContextClass) {
+            return;
+        }
+
+        const context =
+            new AudioContextClass();
+
+        const oscillator =
+            context.createOscillator();
+
+        const gain =
+            context.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+
+        oscillator.frequency.value = 880;
+        gain.gain.value = 0.15;
+
+        oscillator.start();
+
+        oscillator.stop(
+            context.currentTime + 0.3
+        );
+
+    } catch (error) {
+
+        console.log(
+            "Sound signal unavailable"
+        );
+    }
+}
 
 /* =========================================================
    S1
