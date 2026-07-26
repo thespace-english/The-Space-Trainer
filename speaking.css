@@ -151,13 +151,8 @@ body {
 
 .speaking-layout {
     display: grid;
-
-    grid-template-columns:
-        minmax(0, 1.35fr)
-        minmax(360px, 0.65fr);
-
+    grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.55fr);
     gap: 20px;
-
     align-items: start;
 }
 
