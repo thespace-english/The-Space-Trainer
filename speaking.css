@@ -802,7 +802,7 @@ body {
 }
 
 body::after {
-    bottom: -125px;
+    bottom: -175px;
 }
 
 /* логотип */
