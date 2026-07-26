@@ -1,0 +1,816 @@
+/* =========================================================
+   THE SPACE — READING
+   Common styles for NEW EGE Reading 1, 2 and 3 trainers
+   ========================================================= */
+
+
+/* ---------- BASE ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    color: #36534C;
+    overflow-x: hidden;
+}
+
+.reading-page {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 1400px;
+
+    margin: 0 auto;
+    padding: 40px 24px 90px;
+}
+
+
+/* ---------- TOP ---------- */
+
+.reading-top {
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.reading-label {
+    margin-bottom: 5px;
+
+    color: #7AA095;
+
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.reading-title {
+    margin: 0;
+
+    color: #36534C;
+
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.reading-student {
+    margin-top: 7px;
+
+    color: #6F8982;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* ---------- BACK ---------- */
+
+.reading-back {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+
+    z-index: 50;
+
+    padding: 9px 13px;
+
+    border: 1px solid rgba(122, 160, 149, 0.18);
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.72);
+
+    color: #52756C;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* ---------- COMMON CARDS ---------- */
+
+.reading-card,
+.reading-main,
+.reading-side,
+.reading-result,
+.reading-review {
+    border: 1px solid rgba(255, 255, 255, 0.92);
+    border-radius: 22px;
+
+    background: rgba(255, 255, 255, 0.74);
+
+    box-shadow:
+        0 14px 35px rgba(84, 132, 122, 0.12);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* ---------- INSTRUCTION ---------- */
+
+.reading-instruction {
+    max-width: 1000px;
+
+    margin: 0 auto 18px;
+    padding: 14px 20px;
+
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.58);
+
+    color: #617D76;
+
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+.reading-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(360px, 0.85fr);
+
+    gap: 20px;
+
+    align-items: start;
+}
+
+
+/* ---------- LEFT / MAIN ---------- */
+
+.reading-main {
+    height: calc(100vh - 220px);
+    min-height: 580px;
+
+    padding: 30px 32px;
+
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #A8C7BF transparent;
+}
+
+.reading-text {
+    color: #304C46;
+
+    font-size: 17px;
+    line-height: 1.75;
+}
+
+.reading-text p {
+    margin: 0 0 22px;
+}
+
+.reading-text-title {
+    margin: 0 0 24px;
+
+    color: #36534C;
+
+    text-align: center;
+
+    font-size: 24px;
+    font-weight: 800;
+}
+
+
+/* ---------- RIGHT / QUESTIONS ---------- */
+
+.reading-side {
+    height: calc(100vh - 220px);
+    min-height: 580px;
+
+    padding: 24px;
+
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #A8C7BF transparent;
+}
+
+.reading-side-title {
+    margin: 0 0 18px;
+
+    color: #527B71;
+
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+
+/* ---------- QUESTION ---------- */
+
+.reading-question {
+    margin-bottom: 14px;
+    padding: 17px;
+
+    border: 1px solid rgba(122, 160, 149, 0.14);
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.66);
+}
+
+.reading-question-title {
+    display: block;
+
+    margin-bottom: 11px;
+
+    color: #36534C;
+
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.45;
+}
+
+
+/* ---------- OPTIONS ---------- */
+
+.reading-option {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin: 7px 0;
+    padding: 10px 11px;
+
+    border: 1px solid rgba(122, 160, 149, 0.15);
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.62);
+
+    color: #46655E;
+
+    font-size: 15px;
+    line-height: 1.4;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.reading-option:hover {
+    background: rgba(224, 246, 240, 0.72);
+}
+
+.reading-option input {
+    flex-shrink: 0;
+
+    margin-top: 3px;
+
+    accent-color: #6F9F93;
+}
+
+
+/* ---------- SELECTS FOR R1 / R2 ---------- */
+
+.reading-select {
+    min-width: 64px;
+
+    padding: 7px 9px;
+
+    border: 2px solid #9BBEB5;
+    border-radius: 9px;
+
+    background: rgba(255, 255, 255, 0.88);
+
+    color: #36534C;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+
+    outline: none;
+    cursor: pointer;
+}
+
+.reading-select:focus {
+    border-color: #6F9F93;
+}
+
+
+/* ---------- R2 GAPS ---------- */
+
+.reading-gap {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    margin: 0 3px;
+
+    white-space: nowrap;
+}
+
+.reading-gap-letter {
+    color: #527B71;
+    font-weight: 800;
+}
+
+
+/* ---------- R1 TEXT BLOCK ---------- */
+
+.reading-passage {
+    margin-bottom: 24px;
+    padding-bottom: 22px;
+
+    border-bottom: 1px solid rgba(122, 160, 149, 0.16);
+}
+
+.reading-passage:last-child {
+    border-bottom: none;
+}
+
+.reading-passage-label {
+    margin-bottom: 8px;
+
+    color: #527B71;
+
+    font-size: 18px;
+    font-weight: 800;
+}
+
+
+/* ---------- CORRECT / WRONG ---------- */
+
+.reading-option.correct,
+.reading-question.correct,
+.reading-select.correct {
+    border-color: rgba(74, 163, 127, 0.48) !important;
+    background: rgba(217, 244, 231, 0.82) !important;
+    color: #28634E !important;
+}
+
+.reading-option.wrong,
+.reading-question.wrong,
+.reading-select.wrong {
+    border-color: rgba(199, 112, 112, 0.46) !important;
+    background: rgba(250, 226, 226, 0.82) !important;
+    color: #824747 !important;
+}
+
+.reading-key {
+    margin-top: 6px;
+
+    color: #4B8B72;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+/* ---------- BUTTONS ---------- */
+
+.reading-button {
+    width: 100%;
+
+    margin-top: 18px;
+    padding: 14px 18px;
+
+    border: none;
+    border-radius: 13px;
+
+    background: #7AA095;
+
+    color: #FFFFFF;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.reading-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.94;
+}
+
+.reading-button.secondary {
+    background: rgba(122, 160, 149, 0.14);
+    color: #52756C;
+}
+
+
+/* ---------- LAST ATTEMPT ---------- */
+
+.reading-review {
+    display: none;
+
+    max-width: 800px;
+
+    margin: 0 auto 18px;
+    padding: 17px 20px;
+
+    text-align: center;
+}
+
+.reading-review-title {
+    color: #527B71;
+
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.reading-review-details {
+    margin-top: 5px;
+
+    color: #617D76;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+/* ---------- RESULT ---------- */
+
+.reading-result {
+    display: none;
+
+    max-width: 700px;
+
+    margin: 20px auto 0;
+    padding: 24px;
+
+    text-align: center;
+}
+
+.reading-score {
+    margin-bottom: 7px;
+
+    color: #527B71;
+
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.reading-mistakes {
+    margin-bottom: 5px;
+
+    color: #617D76;
+
+    font-size: 15px;
+}
+
+.reading-saved {
+    color: #78918B;
+
+    font-size: 13px;
+}
+
+
+/* ---------- UTILITY ---------- */
+
+.reading-hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   MAIN CONTENT = APPROX. 2/3
+   QUESTIONS / OPTIONS = APPROX. 1/3
+   ========================================================= */
+
+@media (max-width: 820px) {
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    body {
+        height: 100dvh;
+    }
+
+    .reading-page {
+        display: flex;
+        flex-direction: column;
+
+        width: 100%;
+        height: 100dvh;
+
+        padding:
+            52px
+            8px
+            8px;
+
+        overflow: hidden;
+    }
+
+
+    /* TOP */
+
+    .reading-top {
+        flex-shrink: 0;
+
+        margin-bottom: 6px;
+    }
+
+    .reading-label {
+        margin-bottom: 2px;
+
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+    .reading-title {
+        font-size: 20px;
+        line-height: 1.15;
+    }
+
+    .reading-student {
+        margin-top: 2px;
+        font-size: 12px;
+    }
+
+    .reading-back {
+        top: 8px;
+        left: 8px;
+
+        padding: 7px 9px;
+
+        font-size: 11px;
+    }
+
+
+    /* INSTRUCTION IS NOT NEEDED ON SMALL SCREEN */
+
+    .reading-instruction {
+        display: none;
+    }
+
+
+    /* LAST ATTEMPT */
+
+    .reading-review {
+        flex-shrink: 0;
+
+        margin-bottom: 6px;
+        padding: 7px 10px;
+
+        border-radius: 13px;
+    }
+
+    .reading-review-title {
+        font-size: 11px;
+    }
+
+    .reading-review-details {
+        margin-top: 1px;
+        font-size: 12px;
+    }
+
+
+    /* 2/3 + 1/3 */
+
+    .reading-layout {
+        flex: 1;
+
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        grid-template-rows:
+            minmax(0, 2fr)
+            minmax(0, 1fr);
+
+        gap: 6px;
+
+        min-height: 0;
+
+        overflow: hidden;
+    }
+
+
+    /* MAIN TEXT */
+
+    .reading-main {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+
+        padding: 16px 15px;
+
+        border-radius: 17px;
+
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .reading-text-title {
+        margin-bottom: 15px;
+
+        font-size: 22px;
+        line-height: 1.25;
+    }
+
+    .reading-text {
+        /*
+           IMPORTANT:
+           Do not reduce this.
+           Reading text must stay large on phones.
+        */
+
+        font-size: 19px;
+        line-height: 1.7;
+    }
+
+    .reading-text p {
+        margin-bottom: 20px;
+    }
+
+    .reading-passage {
+        margin-bottom: 22px;
+        padding-bottom: 19px;
+    }
+
+    .reading-passage-label {
+        font-size: 20px;
+    }
+
+
+    /* QUESTIONS / OPTIONS */
+
+    .reading-side {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+
+        padding: 12px;
+
+        border-radius: 17px;
+
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .reading-side-title {
+        position: sticky;
+        top: -12px;
+
+        z-index: 5;
+
+        margin:
+            -12px
+            -12px
+            10px;
+
+        padding:
+            10px
+            12px;
+
+        background: rgba(239, 249, 246, 0.96);
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        color: #527B71;
+
+        font-size: 15px;
+    }
+
+    .reading-question {
+        margin-bottom: 10px;
+        padding: 14px;
+
+        border-radius: 13px;
+    }
+
+    .reading-question-title {
+        margin-bottom: 9px;
+
+        font-size: 18px;
+        line-height: 1.4;
+    }
+
+    .reading-option {
+        margin: 6px 0;
+        padding: 10px;
+
+        font-size: 17px;
+        line-height: 1.4;
+    }
+
+    .reading-option input {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    /* R1 / R2 SELECT */
+
+    .reading-select {
+        min-width: 62px;
+
+        padding: 7px 8px;
+
+        font-size: 18px;
+    }
+
+    .reading-gap {
+        margin: 2px 3px;
+    }
+
+    .reading-gap-letter {
+        font-size: 19px;
+    }
+
+
+    /* BUTTON */
+
+    .reading-button {
+        margin-top: 12px;
+        padding: 13px;
+
+        font-size: 16px;
+    }
+
+
+    /* RESULT POPUP */
+
+    .reading-result {
+        position: fixed;
+
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+
+        z-index: 100;
+
+        width: auto;
+
+        margin: 0;
+        padding: 18px;
+
+        border-radius: 17px;
+    }
+
+    .reading-score {
+        font-size: 25px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   Keep text readable
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+    .reading-page {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .reading-main {
+        padding: 14px 13px;
+    }
+
+    .reading-text {
+        font-size: 18px;
+        line-height: 1.68;
+    }
+
+    .reading-side {
+        padding: 10px;
+    }
+
+    .reading-option {
+        font-size: 16px;
+    }
+
+    .reading-question-title {
+        font-size: 17px;
+    }
+}
