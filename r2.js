@@ -1,99 +1,346 @@
 /* =========================================================
    THE SPACE — EGE READING 2 ENGINE
-   For NEW R2 trainers only
+   Builds NEW R2 trainers from READING_TASK
    ========================================================= */
 
 
-/* ---------- PLATFORM ---------- */
+/* FAVICON */
+
+if (!document.querySelector('link[rel="icon"]')) {
+    const favicon = document.createElement("link");
+    favicon.rel = "icon";
+    favicon.type = "image/png";
+    favicon.href = "https://thespace-english.github.io/EGE/favicon.png";
+    document.head.appendChild(favicon);
+}
+
+
+/* PLATFORM */
 
 const R2_API_URL =
     "https://script.google.com/macros/s/AKfycbxxTEqdc_eAgBYhxPlAxGdD4ufwliTjwp3Rvc_leSns3wG6tnS1KKlCQABN2OYHZP1nTQ/exec";
-
-const R2_COURSE = "EGE";
-const R2_SECTION = "R2";
 
 const R2_PAGE_URL =
     "https://thespace-english.github.io/The-Space-Trainer/ege-r2.html";
 
 
-/* ---------- STUDENT ---------- */
+/* CHECK DATA */
 
-const r2Params =
+if (
+    typeof READING_TASK === "undefined" ||
+    !READING_TASK.id ||
+    !READING_TASK.title ||
+    !READING_TASK.text ||
+    !Array.isArray(READING_TASK.options) ||
+    !READING_TASK.answers
+) {
+    throw new Error(
+        "READING_TASK is incomplete"
+    );
+}
+
+
+/* STUDENT */
+
+const params =
     new URLSearchParams(
         window.location.search
     );
 
-let r2Student =
-    r2Params.get("student") || "";
+let student =
+    params.get("student") ||
+    localStorage.getItem(
+        "theSpaceStudent"
+    ) ||
+    "";
 
-if (!r2Student) {
-
-    r2Student =
-        localStorage.getItem(
-            "theSpaceStudent"
-        ) || "";
-}
-
-if (r2Student) {
-
+if (student) {
     localStorage.setItem(
         "theSpaceStudent",
-        r2Student
+        student
     );
 }
 
-const r2StudentElement =
+
+/* CREATE PAGE */
+
+const app =
     document.getElementById(
-        "readingStudent"
+        "readingApp"
     );
 
-if (r2StudentElement) {
+app.innerHTML = `
 
-    r2StudentElement.textContent =
-        r2Student
-            ? "Student: " + r2Student
-            : "Student not selected";
-}
+    <div class="space-decor space-decor-medium"></div>
+    <div class="space-decor space-decor-small"></div>
+
+    <button
+        id="readingBack"
+        class="reading-back"
+        type="button"
+    >
+        ← BACK TO R2
+    </button>
 
 
-/* ---------- BACK ---------- */
+    <div class="reading-page">
 
-function readingBack() {
+        <div class="reading-top">
 
-    if (window.history.length > 1) {
+            <div class="reading-label">
+                EGE · R2 · ${READING_TASK.id}
+            </div>
 
-        window.history.back();
-        return;
-    }
+            <h1 class="reading-title">
+                ${READING_TASK.title}
+            </h1>
 
-    let url =
-        R2_PAGE_URL;
+            <div
+                id="readingStudent"
+                class="reading-student"
+            ></div>
 
-    if (r2Student) {
+        </div>
 
-        url +=
-            "?student=" +
-            encodeURIComponent(
-                r2Student
+
+        <div
+            id="readingReview"
+            class="reading-review"
+        >
+            <div class="reading-review-title">
+                LAST ATTEMPT
+            </div>
+
+            <div
+                id="readingReviewDetails"
+                class="reading-review-details"
+            ></div>
+
+            <button
+                id="readingRetryTop"
+                class="reading-button secondary"
+                type="button"
+            >
+                TRY AGAIN
+            </button>
+        </div>
+
+
+        <div class="reading-layout">
+
+            <section class="reading-main">
+
+                <h2 class="reading-text-title">
+                    ${READING_TASK.title}
+                </h2>
+
+                <div
+                    id="readingText"
+                    class="reading-text"
+                ></div>
+
+            </section>
+
+
+            <section class="reading-side">
+
+                <div class="reading-side-title">
+                    SENTENCE PARTS
+                </div>
+
+                <div id="readingOptions"></div>
+
+                <button
+                    id="readingCheck"
+                    class="reading-button"
+                    type="button"
+                >
+                    CHECK ANSWERS
+                </button>
+
+            </section>
+
+        </div>
+
+
+        <div
+            id="readingResult"
+            class="reading-result"
+        >
+            <div
+                id="readingScore"
+                class="reading-score"
+            ></div>
+
+            <div
+                id="readingMistakes"
+                class="reading-mistakes"
+            ></div>
+
+            <div
+                id="readingSaved"
+                class="reading-saved"
+            ></div>
+
+            <button
+                id="readingRetryBottom"
+                class="reading-button secondary"
+                type="button"
+            >
+                TRY AGAIN
+            </button>
+        </div>
+
+    </div>
+`;
+
+
+/* STUDENT */
+
+document.getElementById(
+    "readingStudent"
+).textContent =
+    student
+        ? "Student: " + student
+        : "Student not selected";
+
+
+/* OPTIONS */
+
+const optionsBox =
+    document.getElementById(
+        "readingOptions"
+    );
+
+READING_TASK.options.forEach(
+    (option, index) => {
+
+        const item =
+            document.createElement(
+                "div"
             );
-    }
 
-    window.location.href =
-        url;
+        item.className =
+            "reading-question";
+
+        item.innerHTML = `
+            <span class="reading-question-title">
+                ${index + 1}. ${option}
+            </span>
+        `;
+
+        optionsBox.appendChild(item);
+    }
+);
+
+
+/* CREATE GAP */
+
+function createGap(letter) {
+
+    const correct =
+        String(
+            READING_TASK.answers[letter]
+        );
+
+    let options =
+        `<option value="">—</option>`;
+
+    READING_TASK.options.forEach(
+        (_, index) => {
+
+            const value =
+                index + 1;
+
+            options += `
+                <option value="${value}">
+                    ${value}
+                </option>
+            `;
+        }
+    );
+
+    return `
+        <span
+            class="reading-gap"
+            data-question="${letter}"
+            data-answer="${correct}"
+        >
+            <span class="reading-gap-letter">
+                ${letter}
+            </span>
+
+            <select class="reading-select">
+                ${options}
+            </select>
+        </span>
+    `;
 }
 
 
-/* ---------- HELPERS ---------- */
+/* TEXT
+   Use {{A}}, {{B}}, {{C}} etc.
+*/
 
-function r2Gaps() {
+let preparedText =
+    READING_TASK.text;
+
+Object.keys(
+    READING_TASK.answers
+).forEach(letter => {
+
+    preparedText =
+        preparedText.replaceAll(
+            "{{" + letter + "}}",
+            createGap(letter)
+        );
+});
+
+document.getElementById(
+    "readingText"
+).innerHTML =
+    preparedText;
+
+
+/* BACK */
+
+document.getElementById(
+    "readingBack"
+).addEventListener(
+    "click",
+    function () {
+
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        let url =
+            R2_PAGE_URL;
+
+        if (student) {
+
+            url +=
+                "?student=" +
+                encodeURIComponent(student);
+        }
+
+        window.location.href = url;
+    }
+);
+
+
+/* HELPERS */
+
+function getGaps() {
 
     return document.querySelectorAll(
-        ".reading-gap"
+        ".reading-gap[data-question]"
     );
 }
 
 
-function r2ClearStates() {
+function clearStates() {
 
     document
         .querySelectorAll(
@@ -111,29 +358,11 @@ function r2ClearStates() {
         .querySelectorAll(
             ".reading-key"
         )
-        .forEach(key => {
-
-            key.remove();
-        });
+        .forEach(key => key.remove());
 }
 
 
-function r2GetAnswer(gap) {
-
-    const select =
-        gap.querySelector(
-            ".reading-select"
-        );
-
-    if (!select) {
-        return "";
-    }
-
-    return select.value || "";
-}
-
-
-function r2SetDisabled(value) {
+function setDisabled(value) {
 
     document
         .querySelectorAll(
@@ -141,15 +370,12 @@ function r2SetDisabled(value) {
         )
         .forEach(select => {
 
-            select.disabled =
-                value;
+            select.disabled = value;
         });
 }
 
 
-/* ---------- PARSE OLD + NEW ANSWERS ---------- */
-
-function r2ParseAnswers(text) {
+function parseAnswers(text) {
 
     const answers = {};
 
@@ -170,99 +396,31 @@ function r2ParseAnswers(text) {
 
             const key =
                 part
-                    .slice(
-                        0,
-                        separator
-                    )
+                    .slice(0, separator)
                     .trim()
                     .toUpperCase()
-                    .replace(
-                        /^Q/i,
-                        ""
-                    );
+                    .replace(/^Q/i, "");
 
-            const answer =
+            const value =
                 part
-                    .slice(
-                        separator + 1
-                    )
+                    .slice(separator + 1)
                     .trim();
 
             answers[key] =
-                answer === "-"
+                value === "-"
                     ? ""
-                    : answer;
+                    : value;
         });
 
     return answers;
 }
 
 
-/* ---------- SHOW SAVED ATTEMPT ---------- */
+/* LAST ATTEMPT */
 
-function r2ShowSaved(
-    gap,
-    userAnswer
-) {
+async function loadLastAttempt() {
 
-    const correct =
-        gap.dataset.answer;
-
-    const select =
-        gap.querySelector(
-            ".reading-select"
-        );
-
-    if (!select) {
-        return;
-    }
-
-    select.value =
-        userAnswer || "";
-
-    if (
-        userAnswer ===
-        correct
-    ) {
-
-        select.classList.add(
-            "correct"
-        );
-
-    } else {
-
-        select.classList.add(
-            "wrong"
-        );
-
-        const key =
-            document.createElement(
-                "span"
-            );
-
-        key.className =
-            "reading-key";
-
-        key.textContent =
-            "Correct: " +
-            correct;
-
-        gap.appendChild(
-            key
-        );
-    }
-}
-
-
-/* ---------- LOAD LAST ATTEMPT ---------- */
-
-async function r2LoadLastAttempt() {
-
-    if (
-        !r2Student ||
-        typeof TASK_ID ===
-            "undefined"
-    ) {
+    if (!student) {
         return;
     }
 
@@ -272,16 +430,12 @@ async function r2LoadLastAttempt() {
             R2_API_URL +
             "?action=lastattempt" +
             "&student=" +
-            encodeURIComponent(
-                r2Student
-            ) +
-            "&course=" +
-            R2_COURSE +
-            "&section=" +
-            R2_SECTION +
+            encodeURIComponent(student) +
+            "&course=EGE" +
+            "&section=R2" +
             "&taskId=" +
             encodeURIComponent(
-                TASK_ID
+                READING_TASK.id
             );
 
         const response =
@@ -291,8 +445,7 @@ async function r2LoadLastAttempt() {
             await response.json();
 
         if (
-            data.status !==
-                "success" ||
+            data.status !== "success" ||
             !data.found ||
             !data.lastAttempt
         ) {
@@ -303,61 +456,73 @@ async function r2LoadLastAttempt() {
             data.lastAttempt;
 
         const answers =
-            r2ParseAnswers(
+            parseAnswers(
                 last.answers
             );
 
-        r2ClearStates();
+        getGaps().forEach(gap => {
 
-        r2Gaps()
-            .forEach(gap => {
+            const letter =
+                gap.dataset.question;
 
-                const letter =
-                    gap.dataset.question;
+            const correct =
+                gap.dataset.answer;
 
-                r2ShowSaved(
-                    gap,
-                    answers[letter] || ""
+            const answer =
+                answers[letter] || "";
+
+            const select =
+                gap.querySelector(
+                    ".reading-select"
                 );
-            });
 
-        r2SetDisabled(true);
+            select.value = answer;
 
-        const checkButton =
-            document.getElementById(
-                "readingCheck"
-            );
+            if (answer === correct) {
 
-        if (checkButton) {
+                select.classList.add(
+                    "correct"
+                );
 
-            checkButton.style.display =
-                "none";
-        }
+            } else {
 
-        const review =
-            document.getElementById(
-                "readingReview"
-            );
+                select.classList.add(
+                    "wrong"
+                );
 
-        const details =
-            document.getElementById(
-                "readingReviewDetails"
-            );
+                const key =
+                    document.createElement(
+                        "span"
+                    );
 
-        if (
-            review &&
-            details
-        ) {
+                key.className =
+                    "reading-key";
 
-            details.textContent =
-                "Attempt " +
-                last.attempt +
-                " · " +
-                last.result;
+                key.textContent =
+                    "Correct: " + correct;
 
-            review.style.display =
-                "block";
-        }
+                gap.appendChild(key);
+            }
+        });
+
+        setDisabled(true);
+
+        document.getElementById(
+            "readingCheck"
+        ).style.display = "none";
+
+        document.getElementById(
+            "readingReviewDetails"
+        ).textContent =
+            "Attempt " +
+            last.attempt +
+            " · " +
+            last.result;
+
+        document.getElementById(
+            "readingReview"
+        ).style.display =
+            "block";
 
     } catch (error) {
 
@@ -369,11 +534,11 @@ async function r2LoadLastAttempt() {
 }
 
 
-/* ---------- TRY AGAIN ---------- */
+/* TRY AGAIN */
 
-function readingTryAgain() {
+function tryAgain() {
 
-    r2ClearStates();
+    clearStates();
 
     document
         .querySelectorAll(
@@ -385,329 +550,205 @@ function readingTryAgain() {
             select.disabled = false;
         });
 
-    const review =
-        document.getElementById(
-            "readingReview"
-        );
+    document.getElementById(
+        "readingReview"
+    ).style.display = "none";
 
-    const result =
-        document.getElementById(
-            "readingResult"
-        );
+    document.getElementById(
+        "readingResult"
+    ).style.display = "none";
 
-    const check =
-        document.getElementById(
-            "readingCheck"
-        );
-
-    if (review) {
-        review.style.display =
-            "none";
-    }
-
-    if (result) {
-        result.style.display =
-            "none";
-    }
-
-    if (check) {
-        check.style.display =
-            "block";
-    }
-
-    const main =
-        document.querySelector(
-            ".reading-main"
-        );
-
-    const side =
-        document.querySelector(
-            ".reading-side"
-        );
-
-    if (main) {
-        main.scrollTop = 0;
-    }
-
-    if (side) {
-        side.scrollTop = 0;
-    }
+    document.getElementById(
+        "readingCheck"
+    ).style.display = "block";
 }
 
 
-/* ---------- CHECK ---------- */
+document.getElementById(
+    "readingRetryTop"
+).addEventListener(
+    "click",
+    tryAgain
+);
 
-async function r2CheckAnswers() {
+document.getElementById(
+    "readingRetryBottom"
+).addEventListener(
+    "click",
+    tryAgain
+);
 
-    if (!r2Student) {
 
-        alert(
-            "Please return to R2 and choose your name."
-        );
+/* CHECK */
 
-        return;
-    }
+document.getElementById(
+    "readingCheck"
+).addEventListener(
+    "click",
+    async function () {
 
-    if (
-        typeof TASK_ID ===
-        "undefined"
-    ) {
+        if (!student) {
 
-        console.error(
-            "TASK_ID is not defined"
-        );
-
-        return;
-    }
-
-    r2ClearStates();
-
-    let score = 0;
-
-    const mistakes = [];
-    const answers = [];
-
-    const gaps =
-        r2Gaps();
-
-    gaps.forEach(gap => {
-
-        const letter =
-            gap.dataset.question;
-
-        const correct =
-            gap.dataset.answer;
-
-        const answer =
-            r2GetAnswer(gap);
-
-        answers.push(
-            letter +
-            ":" +
-            (
-                answer ||
-                "-"
-            )
-        );
-
-        const select =
-            gap.querySelector(
-                ".reading-select"
+            alert(
+                "Please return to R2 and choose your name."
             );
 
-        if (
-            answer ===
-            correct
-        ) {
+            return;
+        }
 
-            score++;
+        clearStates();
 
-            if (select) {
+        let score = 0;
+
+        const mistakes = [];
+        const answers = [];
+
+        const gaps = getGaps();
+
+        gaps.forEach(gap => {
+
+            const letter =
+                gap.dataset.question;
+
+            const correct =
+                gap.dataset.answer;
+
+            const select =
+                gap.querySelector(
+                    ".reading-select"
+                );
+
+            const answer =
+                select.value || "";
+
+            answers.push(
+                letter +
+                ":" +
+                (answer || "-")
+            );
+
+            if (answer === correct) {
+
+                score++;
+
                 select.classList.add(
                     "correct"
                 );
-            }
 
-        } else {
+            } else {
 
-            mistakes.push(
-                letter
-            );
+                mistakes.push(letter);
 
-            if (select) {
                 select.classList.add(
                     "wrong"
                 );
+
+                const key =
+                    document.createElement(
+                        "span"
+                    );
+
+                key.className =
+                    "reading-key";
+
+                key.textContent =
+                    "Correct: " + correct;
+
+                gap.appendChild(key);
             }
+        });
 
-            const key =
-                document.createElement(
-                    "span"
-                );
+        setDisabled(true);
 
-            key.className =
-                "reading-key";
+        const result =
+            score + "/" + gaps.length;
 
-            key.textContent =
-                "Correct: " +
-                correct;
+        const mistakesText =
+            mistakes.length
+                ? mistakes.join(", ")
+                : "—";
 
-            gap.appendChild(
-                key
-            );
-        }
-
-    });
-
-    r2SetDisabled(true);
-
-    const resultText =
-        score +
-        "/" +
-        gaps.length;
-
-    const mistakesText =
-        mistakes.length
-            ? mistakes.join(", ")
-            : "—";
-
-    const scoreElement =
         document.getElementById(
             "readingScore"
-        );
+        ).textContent = result;
 
-    const mistakesElement =
         document.getElementById(
             "readingMistakes"
-        );
-
-    const savedElement =
-        document.getElementById(
-            "readingSaved"
-        );
-
-    const resultCard =
-        document.getElementById(
-            "readingResult"
-        );
-
-    const checkButton =
-        document.getElementById(
-            "readingCheck"
-        );
-
-    if (scoreElement) {
-        scoreElement.textContent =
-            resultText;
-    }
-
-    if (mistakesElement) {
-
-        mistakesElement.textContent =
+        ).textContent =
             mistakes.length
                 ? "Mistakes: " +
                   mistakes.join(", ")
                 : "No mistakes";
-    }
 
-    if (savedElement) {
-
-        savedElement.textContent =
+        document.getElementById(
+            "readingSaved"
+        ).textContent =
             "Saving result...";
-    }
 
-    if (resultCard) {
+        document.getElementById(
+            "readingResult"
+        ).style.display = "block";
 
-        resultCard.style.display =
-            "block";
-    }
+        document.getElementById(
+            "readingCheck"
+        ).style.display = "none";
 
-    if (checkButton) {
+        try {
 
-        checkButton.style.display =
-            "none";
-    }
+            const response =
+                await fetch(
+                    R2_API_URL,
+                    {
+                        method: "POST",
 
-    try {
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
 
-        const response =
-            await fetch(
-                R2_API_URL,
-                {
-                    method: "POST",
+                        body:
+                            JSON.stringify({
 
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
+                                student,
+                                course: "EGE",
+                                section: "R2",
 
-                    body:
-                        JSON.stringify({
+                                taskId:
+                                    READING_TASK.id,
 
-                            student:
-                                r2Student,
+                                result,
 
-                            course:
-                                R2_COURSE,
+                                mistakes:
+                                    mistakesText,
 
-                            section:
-                                R2_SECTION,
+                                answers:
+                                    answers.join(", ")
+                            })
+                    }
+                );
 
-                            taskId:
-                                TASK_ID,
+            const data =
+                await response.json();
 
-                            result:
-                                resultText,
+            document.getElementById(
+                "readingSaved"
+            ).textContent =
+                data.status === "success"
+                    ? "Result saved · Attempt " +
+                      data.attempt
+                    : "Could not save result";
 
-                            mistakes:
-                                mistakesText,
+        } catch (error) {
 
-                            answers:
-                                answers.join(
-                                    ", "
-                                )
-                        })
-                }
-            );
+            console.error(error);
 
-        const data =
-            await response.json();
-
-        if (
-            data.status ===
-            "success"
-        ) {
-
-            if (savedElement) {
-
-                savedElement.textContent =
-                    "Result saved · Attempt " +
-                    data.attempt;
-            }
-
-        } else {
-
-            if (savedElement) {
-
-                savedElement.textContent =
-                    "Could not save result";
-            }
-        }
-
-    } catch (error) {
-
-        console.error(error);
-
-        if (savedElement) {
-
-            savedElement.textContent =
+            document.getElementById(
+                "readingSaved"
+            ).textContent =
                 "Could not save result";
         }
     }
-}
+);
 
 
-/* ---------- FORM ---------- */
-
-const r2Form =
-    document.getElementById(
-        "readingForm"
-    );
-
-if (r2Form) {
-
-    r2Form.addEventListener(
-        "submit",
-        function(event) {
-
-            event.preventDefault();
-
-            r2CheckAnswers();
-        }
-    );
-}
-
-
-/* ---------- START ---------- */
-
-r2LoadLastAttempt();
+loadLastAttempt();

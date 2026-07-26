@@ -1,156 +1,354 @@
 /* =========================================================
    THE SPACE — EGE READING 1 ENGINE
-   For NEW R1 trainers only
+   Builds NEW R1 trainers from READING_TASK
    ========================================================= */
 
 
-/* ---------- PLATFORM ---------- */
+/* FAVICON */
+
+if (!document.querySelector('link[rel="icon"]')) {
+    const favicon = document.createElement("link");
+    favicon.rel = "icon";
+    favicon.type = "image/png";
+    favicon.href = "https://thespace-english.github.io/EGE/favicon.png";
+    document.head.appendChild(favicon);
+}
+
+
+/* PLATFORM */
 
 const R1_API_URL =
     "https://script.google.com/macros/s/AKfycbxxTEqdc_eAgBYhxPlAxGdD4ufwliTjwp3Rvc_leSns3wG6tnS1KKlCQABN2OYHZP1nTQ/exec";
-
-const R1_COURSE = "EGE";
-const R1_SECTION = "R1";
 
 const R1_PAGE_URL =
     "https://thespace-english.github.io/The-Space-Trainer/ege-r1.html";
 
 
-/* ---------- STUDENT ---------- */
+/* CHECK DATA */
 
-const r1Params =
-    new URLSearchParams(
-        window.location.search
-    );
-
-let r1Student =
-    r1Params.get("student") || "";
-
-if (!r1Student) {
-
-    r1Student =
-        localStorage.getItem(
-            "theSpaceStudent"
-        ) || "";
+if (
+    typeof READING_TASK === "undefined" ||
+    !READING_TASK.id ||
+    !READING_TASK.title ||
+    !Array.isArray(READING_TASK.headings) ||
+    !Array.isArray(READING_TASK.texts)
+) {
+    throw new Error("READING_TASK is incomplete");
 }
 
-if (r1Student) {
 
+/* STUDENT */
+
+const params =
+    new URLSearchParams(window.location.search);
+
+let student =
+    params.get("student") ||
+    localStorage.getItem("theSpaceStudent") ||
+    "";
+
+if (student) {
     localStorage.setItem(
         "theSpaceStudent",
-        r1Student
+        student
     );
 }
 
-const r1StudentElement =
+
+/* PAGE */
+
+const app =
+    document.getElementById("readingApp");
+
+app.innerHTML = `
+
+    <div class="space-decor space-decor-medium"></div>
+    <div class="space-decor space-decor-small"></div>
+
+    <button
+        id="readingBack"
+        class="reading-back"
+        type="button"
+    >
+        ← BACK TO R1
+    </button>
+
+    <div class="reading-page">
+
+        <div class="reading-top">
+
+            <div class="reading-label">
+                EGE · R1 · ${READING_TASK.id}
+            </div>
+
+            <h1 class="reading-title">
+                ${READING_TASK.title}
+            </h1>
+
+            <div
+                id="readingStudent"
+                class="reading-student"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="readingReview"
+            class="reading-review"
+        >
+            <div class="reading-review-title">
+                LAST ATTEMPT
+            </div>
+
+            <div
+                id="readingReviewDetails"
+                class="reading-review-details"
+            ></div>
+
+            <button
+                id="readingRetryTop"
+                class="reading-button secondary"
+                type="button"
+            >
+                TRY AGAIN
+            </button>
+        </div>
+
+
+        <div class="reading-layout">
+
+            <section class="reading-main">
+
+                <div
+                    id="readingTexts"
+                    class="reading-text"
+                ></div>
+
+            </section>
+
+
+            <section class="reading-side">
+
+                <div class="reading-side-title">
+                    HEADINGS
+                </div>
+
+                <div id="readingHeadings"></div>
+
+                <button
+                    id="readingCheck"
+                    class="reading-button"
+                    type="button"
+                >
+                    CHECK ANSWERS
+                </button>
+
+            </section>
+
+        </div>
+
+
+        <div
+            id="readingResult"
+            class="reading-result"
+        >
+            <div
+                id="readingScore"
+                class="reading-score"
+            ></div>
+
+            <div
+                id="readingMistakes"
+                class="reading-mistakes"
+            ></div>
+
+            <div
+                id="readingSaved"
+                class="reading-saved"
+            ></div>
+
+            <button
+                id="readingRetryBottom"
+                class="reading-button secondary"
+                type="button"
+            >
+                TRY AGAIN
+            </button>
+        </div>
+
+    </div>
+`;
+
+
+/* STUDENT */
+
+document.getElementById(
+    "readingStudent"
+).textContent =
+    student
+        ? "Student: " + student
+        : "Student not selected";
+
+
+/* HEADINGS */
+
+const headingsBox =
     document.getElementById(
-        "readingStudent"
+        "readingHeadings"
     );
 
-if (r1StudentElement) {
+READING_TASK.headings.forEach(
+    (heading, index) => {
 
-    r1StudentElement.textContent =
-        r1Student
-            ? "Student: " + r1Student
-            : "Student not selected";
-}
+        const item =
+            document.createElement("div");
 
+        item.className =
+            "reading-question";
 
-/* ---------- BACK ---------- */
+        item.innerHTML = `
+            <span class="reading-question-title">
+                ${index + 1}. ${heading}
+            </span>
+        `;
 
-function readingBack() {
-
-    if (window.history.length > 1) {
-
-        window.history.back();
-        return;
+        headingsBox.appendChild(item);
     }
+);
 
-    let url =
-        R1_PAGE_URL;
 
-    if (r1Student) {
+/* TEXTS */
 
-        url +=
-            "?student=" +
-            encodeURIComponent(
-                r1Student
-            );
+const textsBox =
+    document.getElementById(
+        "readingTexts"
+    );
+
+READING_TASK.texts.forEach(
+    (item, index) => {
+
+        const number =
+            item.number ?? index + 1;
+
+        const label =
+            item.label ?? String.fromCharCode(65 + index);
+
+        const passage =
+            document.createElement("div");
+
+        passage.className =
+            "reading-passage";
+
+        passage.dataset.question =
+            String(number);
+
+        passage.dataset.answer =
+            String(item.answer);
+
+        let options =
+            `<option value="">—</option>`;
+
+        READING_TASK.headings.forEach(
+            (_, headingIndex) => {
+
+                const value =
+                    headingIndex + 1;
+
+                options += `
+                    <option value="${value}">
+                        ${value}
+                    </option>
+                `;
+            }
+        );
+
+        passage.innerHTML = `
+
+            <div class="reading-passage-label">
+                ${label}
+            </div>
+
+            <div>
+                ${item.text}
+            </div>
+
+            <div style="margin-top:12px;">
+                <select class="reading-select">
+                    ${options}
+                </select>
+            </div>
+        `;
+
+        textsBox.appendChild(passage);
     }
-
-    window.location.href =
-        url;
-}
+);
 
 
-/* ---------- HELPERS ---------- */
+/* BACK */
 
-function r1Cards() {
+document.getElementById(
+    "readingBack"
+).addEventListener(
+    "click",
+    function () {
 
+        if (window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        let url = R1_PAGE_URL;
+
+        if (student) {
+            url +=
+                "?student=" +
+                encodeURIComponent(student);
+        }
+
+        window.location.href = url;
+    }
+);
+
+
+/* HELPERS */
+
+function getItems() {
     return document.querySelectorAll(
-        ".reading-question"
+        ".reading-passage[data-question]"
     );
 }
 
 
-function r1ClearStates() {
+function clearStates() {
 
     document
-        .querySelectorAll(
-            ".reading-question"
-        )
-        .forEach(card => {
+        .querySelectorAll(".reading-select")
+        .forEach(select => {
 
-            card.classList.remove(
+            select.classList.remove(
                 "correct",
                 "wrong"
             );
-
-            const oldKey =
-                card.querySelector(
-                    ".reading-key"
-                );
-
-            if (oldKey) {
-                oldKey.remove();
-            }
-
         });
-}
-
-
-function r1GetAnswer(card) {
-
-    const select =
-        card.querySelector(
-            ".reading-select"
-        );
-
-    if (!select) {
-        return "";
-    }
-
-    return select.value || "";
-}
-
-
-function r1SetDisabled(value) {
 
     document
-        .querySelectorAll(
-            ".reading-select"
-        )
-        .forEach(select => {
+        .querySelectorAll(".reading-key")
+        .forEach(key => key.remove());
+}
 
-            select.disabled =
-                value;
+
+function setDisabled(value) {
+
+    document
+        .querySelectorAll(".reading-select")
+        .forEach(select => {
+            select.disabled = value;
         });
 }
 
 
-/* ---------- PARSE OLD + NEW ANSWERS ---------- */
-
-function r1ParseAnswers(text) {
+function parseAnswers(text) {
 
     const answers = {};
 
@@ -169,100 +367,32 @@ function r1ParseAnswers(text) {
                 return;
             }
 
-            const number =
+            const key =
                 part
-                    .slice(
-                        0,
-                        separator
-                    )
+                    .slice(0, separator)
                     .trim()
-                    .replace(
-                        /^q/i,
-                        ""
-                    );
+                    .replace(/^q/i, "");
 
-            const answer =
+            const value =
                 part
-                    .slice(
-                        separator + 1
-                    )
+                    .slice(separator + 1)
                     .trim();
 
-            answers[number] =
-                answer === "-"
+            answers[key] =
+                value === "-"
                     ? ""
-                    : answer;
+                    : value;
         });
 
     return answers;
 }
 
 
-/* ---------- SHOW SAVED ATTEMPT ---------- */
+/* LAST ATTEMPT */
 
-function r1ShowSaved(
-    card,
-    userAnswer
-) {
+async function loadLastAttempt() {
 
-    const correct =
-        card.dataset.answer;
-
-    const select =
-        card.querySelector(
-            ".reading-select"
-        );
-
-    if (!select) {
-        return;
-    }
-
-    select.value =
-        userAnswer || "";
-
-    if (
-        userAnswer ===
-        correct
-    ) {
-
-        card.classList.add(
-            "correct"
-        );
-
-    } else {
-
-        card.classList.add(
-            "wrong"
-        );
-
-        const key =
-            document.createElement(
-                "div"
-            );
-
-        key.className =
-            "reading-key";
-
-        key.textContent =
-            "Correct: " +
-            correct;
-
-        card.appendChild(
-            key
-        );
-    }
-}
-
-
-/* ---------- LOAD LAST ATTEMPT ---------- */
-
-async function r1LoadLastAttempt() {
-
-    if (
-        !r1Student ||
-        typeof TASK_ID ===
-            "undefined"
-    ) {
+    if (!student) {
         return;
     }
 
@@ -272,16 +402,12 @@ async function r1LoadLastAttempt() {
             R1_API_URL +
             "?action=lastattempt" +
             "&student=" +
-            encodeURIComponent(
-                r1Student
-            ) +
-            "&course=" +
-            R1_COURSE +
-            "&section=" +
-            R1_SECTION +
+            encodeURIComponent(student) +
+            "&course=EGE" +
+            "&section=R1" +
             "&taskId=" +
             encodeURIComponent(
-                TASK_ID
+                READING_TASK.id
             );
 
         const response =
@@ -291,8 +417,7 @@ async function r1LoadLastAttempt() {
             await response.json();
 
         if (
-            data.status !==
-                "success" ||
+            data.status !== "success" ||
             !data.found ||
             !data.lastAttempt
         ) {
@@ -303,61 +428,70 @@ async function r1LoadLastAttempt() {
             data.lastAttempt;
 
         const answers =
-            r1ParseAnswers(
-                last.answers
-            );
+            parseAnswers(last.answers);
 
-        r1ClearStates();
+        getItems().forEach(item => {
 
-        r1Cards()
-            .forEach(card => {
+            const number =
+                item.dataset.question;
 
-                const number =
-                    card.dataset.question;
+            const correct =
+                item.dataset.answer;
 
-                r1ShowSaved(
-                    card,
-                    answers[number] || ""
+            const answer =
+                answers[number] || "";
+
+            const select =
+                item.querySelector(
+                    ".reading-select"
                 );
-            });
 
-        r1SetDisabled(true);
+            select.value = answer;
 
-        const checkButton =
-            document.getElementById(
-                "readingCheck"
-            );
+            if (answer === correct) {
 
-        if (checkButton) {
+                select.classList.add(
+                    "correct"
+                );
 
-            checkButton.style.display =
-                "none";
-        }
+            } else {
 
-        const review =
-            document.getElementById(
-                "readingReview"
-            );
+                select.classList.add(
+                    "wrong"
+                );
 
-        const details =
-            document.getElementById(
-                "readingReviewDetails"
-            );
+                const key =
+                    document.createElement(
+                        "div"
+                    );
 
-        if (
-            review &&
-            details
-        ) {
+                key.className =
+                    "reading-key";
 
-            details.textContent =
-                "Attempt " +
-                last.attempt +
-                " · " +
-                last.result;
+                key.textContent =
+                    "Correct: " + correct;
 
-            review.style.display =
-                "block";
-        }
+                item.appendChild(key);
+            }
+        });
+
+        setDisabled(true);
+
+        document.getElementById(
+            "readingCheck"
+        ).style.display = "none";
+
+        document.getElementById(
+            "readingReviewDetails"
+        ).textContent =
+            "Attempt " +
+            last.attempt +
+            " · " +
+            last.result;
+
+        document.getElementById(
+            "readingReview"
+        ).style.display = "block";
 
     } catch (error) {
 
@@ -369,336 +503,219 @@ async function r1LoadLastAttempt() {
 }
 
 
-/* ---------- TRY AGAIN ---------- */
+/* TRY AGAIN */
 
-function readingTryAgain() {
+function tryAgain() {
 
-    r1ClearStates();
+    clearStates();
 
     document
-        .querySelectorAll(
-            ".reading-select"
-        )
+        .querySelectorAll(".reading-select")
         .forEach(select => {
 
             select.value = "";
             select.disabled = false;
         });
 
-    const review =
-        document.getElementById(
-            "readingReview"
-        );
+    document.getElementById(
+        "readingReview"
+    ).style.display = "none";
 
-    const result =
-        document.getElementById(
-            "readingResult"
-        );
+    document.getElementById(
+        "readingResult"
+    ).style.display = "none";
 
-    const check =
-        document.getElementById(
-            "readingCheck"
-        );
-
-    if (review) {
-        review.style.display =
-            "none";
-    }
-
-    if (result) {
-        result.style.display =
-            "none";
-    }
-
-    if (check) {
-        check.style.display =
-            "block";
-    }
-
-    const main =
-        document.querySelector(
-            ".reading-main"
-        );
-
-    const side =
-        document.querySelector(
-            ".reading-side"
-        );
-
-    if (main) {
-        main.scrollTop = 0;
-    }
-
-    if (side) {
-        side.scrollTop = 0;
-    }
+    document.getElementById(
+        "readingCheck"
+    ).style.display = "block";
 }
 
 
-/* ---------- CHECK ---------- */
+document.getElementById(
+    "readingRetryTop"
+).addEventListener(
+    "click",
+    tryAgain
+);
 
-async function r1CheckAnswers() {
+document.getElementById(
+    "readingRetryBottom"
+).addEventListener(
+    "click",
+    tryAgain
+);
 
-    if (!r1Student) {
 
-        alert(
-            "Please return to R1 and choose your name."
-        );
+/* CHECK */
 
-        return;
-    }
+document.getElementById(
+    "readingCheck"
+).addEventListener(
+    "click",
+    async function () {
 
-    if (
-        typeof TASK_ID ===
-        "undefined"
-    ) {
+        if (!student) {
 
-        console.error(
-            "TASK_ID is not defined"
-        );
-
-        return;
-    }
-
-    r1ClearStates();
-
-    let score = 0;
-
-    const mistakes = [];
-    const answers = [];
-
-    const cards =
-        r1Cards();
-
-    cards.forEach(card => {
-
-        const number =
-            card.dataset.question;
-
-        const correct =
-            card.dataset.answer;
-
-        const answer =
-            r1GetAnswer(card);
-
-        answers.push(
-            number +
-            ":" +
-            (
-                answer ||
-                "-"
-            )
-        );
-
-        if (
-            answer ===
-            correct
-        ) {
-
-            score++;
-
-            card.classList.add(
-                "correct"
+            alert(
+                "Please return to R1 and choose your name."
             );
 
-        } else {
-
-            mistakes.push(
-                number
-            );
-
-            card.classList.add(
-                "wrong"
-            );
-
-            const key =
-                document.createElement(
-                    "div"
-                );
-
-            key.className =
-                "reading-key";
-
-            key.textContent =
-                "Correct: " +
-                correct;
-
-            card.appendChild(
-                key
-            );
+            return;
         }
 
-    });
+        clearStates();
 
-    r1SetDisabled(true);
+        let score = 0;
 
-    const resultText =
-        score +
-        "/" +
-        cards.length;
+        const mistakes = [];
+        const answers = [];
 
-    const mistakesText =
-        mistakes.length
-            ? mistakes.join(", ")
-            : "—";
+        const items = getItems();
 
-    const scoreElement =
+        items.forEach(item => {
+
+            const number =
+                item.dataset.question;
+
+            const correct =
+                item.dataset.answer;
+
+            const select =
+                item.querySelector(
+                    ".reading-select"
+                );
+
+            const answer =
+                select.value || "";
+
+            answers.push(
+                number +
+                ":" +
+                (answer || "-")
+            );
+
+            if (answer === correct) {
+
+                score++;
+
+                select.classList.add(
+                    "correct"
+                );
+
+            } else {
+
+                mistakes.push(number);
+
+                select.classList.add(
+                    "wrong"
+                );
+
+                const key =
+                    document.createElement(
+                        "div"
+                    );
+
+                key.className =
+                    "reading-key";
+
+                key.textContent =
+                    "Correct: " + correct;
+
+                item.appendChild(key);
+            }
+        });
+
+        setDisabled(true);
+
+        const result =
+            score + "/" + items.length;
+
+        const mistakesText =
+            mistakes.length
+                ? mistakes.join(", ")
+                : "—";
+
         document.getElementById(
             "readingScore"
-        );
+        ).textContent = result;
 
-    const mistakesElement =
         document.getElementById(
             "readingMistakes"
-        );
-
-    const savedElement =
-        document.getElementById(
-            "readingSaved"
-        );
-
-    const resultCard =
-        document.getElementById(
-            "readingResult"
-        );
-
-    const checkButton =
-        document.getElementById(
-            "readingCheck"
-        );
-
-    if (scoreElement) {
-        scoreElement.textContent =
-            resultText;
-    }
-
-    if (mistakesElement) {
-
-        mistakesElement.textContent =
+        ).textContent =
             mistakes.length
                 ? "Mistakes: " +
                   mistakes.join(", ")
                 : "No mistakes";
-    }
 
-    if (savedElement) {
-
-        savedElement.textContent =
+        document.getElementById(
+            "readingSaved"
+        ).textContent =
             "Saving result...";
-    }
 
-    if (resultCard) {
+        document.getElementById(
+            "readingResult"
+        ).style.display = "block";
 
-        resultCard.style.display =
-            "block";
-    }
+        document.getElementById(
+            "readingCheck"
+        ).style.display = "none";
 
-    if (checkButton) {
+        try {
 
-        checkButton.style.display =
-            "none";
-    }
+            const response =
+                await fetch(
+                    R1_API_URL,
+                    {
+                        method: "POST",
 
-    try {
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
 
-        const response =
-            await fetch(
-                R1_API_URL,
-                {
-                    method: "POST",
+                        body:
+                            JSON.stringify({
 
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
+                                student,
+                                course: "EGE",
+                                section: "R1",
 
-                    body:
-                        JSON.stringify({
+                                taskId:
+                                    READING_TASK.id,
 
-                            student:
-                                r1Student,
+                                result,
 
-                            course:
-                                R1_COURSE,
+                                mistakes:
+                                    mistakesText,
 
-                            section:
-                                R1_SECTION,
+                                answers:
+                                    answers.join(", ")
+                            })
+                    }
+                );
 
-                            taskId:
-                                TASK_ID,
+            const data =
+                await response.json();
 
-                            result:
-                                resultText,
+            document.getElementById(
+                "readingSaved"
+            ).textContent =
+                data.status === "success"
+                    ? "Result saved · Attempt " +
+                      data.attempt
+                    : "Could not save result";
 
-                            mistakes:
-                                mistakesText,
+        } catch (error) {
 
-                            answers:
-                                answers.join(
-                                    ", "
-                                )
-                        })
-                }
-            );
+            console.error(error);
 
-        const data =
-            await response.json();
-
-        if (
-            data.status ===
-            "success"
-        ) {
-
-            if (savedElement) {
-
-                savedElement.textContent =
-                    "Result saved · Attempt " +
-                    data.attempt;
-            }
-
-        } else {
-
-            if (savedElement) {
-
-                savedElement.textContent =
-                    "Could not save result";
-            }
-        }
-
-    } catch (error) {
-
-        console.error(error);
-
-        if (savedElement) {
-
-            savedElement.textContent =
+            document.getElementById(
+                "readingSaved"
+            ).textContent =
                 "Could not save result";
         }
     }
-}
+);
 
 
-/* ---------- FORM ---------- */
-
-const r1Form =
-    document.getElementById(
-        "readingForm"
-    );
-
-if (r1Form) {
-
-    r1Form.addEventListener(
-        "submit",
-        function(event) {
-
-            event.preventDefault();
-
-            r1CheckAnswers();
-        }
-    );
-}
-
-
-/* ---------- START ---------- */
-
-r1LoadLastAttempt();
+loadLastAttempt();
