@@ -1,0 +1,833 @@
+/* =========================================================
+   THE SPACE — EGE SPEAKING
+   Common styles for NEW Speaking 1–4 trainers
+   ========================================================= */
+
+
+/* ---------- BASE ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    color: #36534C;
+    overflow-x: hidden;
+}
+
+
+/* ---------- PAGE ---------- */
+
+.speaking-page {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 1380px;
+
+    margin: 0 auto;
+    padding: 40px 24px 90px;
+}
+
+
+/* ---------- TOP ---------- */
+
+.speaking-top {
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.speaking-label {
+    margin-bottom: 5px;
+
+    color: #7AA095;
+
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.speaking-title {
+    margin: 0;
+
+    color: #36534C;
+
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.speaking-student {
+    margin-top: 7px;
+
+    color: #6F8982;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* ---------- BACK ---------- */
+
+.speaking-back {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+
+    z-index: 50;
+
+    padding: 9px 13px;
+
+    border: 1px solid rgba(122, 160, 149, 0.18);
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.72);
+
+    color: #52756C;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* ---------- COMMON CARD ---------- */
+
+.speaking-card,
+.speaking-main,
+.speaking-side,
+.speaking-result,
+.speaking-review,
+.speaking-timer-card,
+.speaking-mode-card {
+    border: 1px solid rgba(255, 255, 255, 0.92);
+    border-radius: 22px;
+
+    background: rgba(255, 255, 255, 0.74);
+
+    box-shadow:
+        0 14px 35px rgba(84, 132, 122, 0.12);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+
+/* ---------- INSTRUCTION ---------- */
+
+.speaking-instruction {
+    max-width: 980px;
+
+    margin: 0 auto 18px;
+    padding: 14px 20px;
+
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.58);
+
+    color: #617D76;
+
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.speaking-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.35fr)
+        minmax(360px, 0.65fr);
+
+    gap: 20px;
+
+    align-items: start;
+}
+
+
+/* ---------- MAIN ---------- */
+
+.speaking-main {
+    min-height: 570px;
+
+    padding: 30px 32px;
+}
+
+.speaking-content-title {
+    margin: 0 0 22px;
+
+    color: #36534C;
+
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.speaking-text {
+    color: #304C46;
+
+    font-size: 18px;
+    line-height: 1.75;
+}
+
+.speaking-text p {
+    margin: 0 0 20px;
+}
+
+
+/* ---------- SIDE ---------- */
+
+.speaking-side {
+    min-height: 570px;
+
+    padding: 24px;
+}
+
+.speaking-side-title {
+    margin: 0 0 18px;
+
+    color: #527B71;
+
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+.speaking-timer-card {
+    margin-bottom: 16px;
+    padding: 22px;
+
+    text-align: center;
+}
+
+.speaking-timer-label {
+    margin-bottom: 7px;
+
+    color: #6F8F87;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+}
+
+.speaking-timer {
+    color: #36534C;
+
+    font-size: 52px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+}
+
+.speaking-timer-status {
+    margin-top: 8px;
+
+    color: #7A928C;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* ---------- TIMER PROGRESS ---------- */
+
+.speaking-progress {
+    width: 100%;
+    height: 7px;
+
+    margin-top: 16px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: rgba(122, 160, 149, 0.14);
+}
+
+.speaking-progress-bar {
+    width: 100%;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: #7AA095;
+
+    transform-origin: left center;
+
+    transition: width 0.25s linear;
+}
+
+
+/* ---------- FINAL SECONDS ---------- */
+
+.speaking-timer-card.warning .speaking-timer {
+    color: #A4745F;
+}
+
+.speaking-timer-card.warning .speaking-progress-bar {
+    background: #B78A73;
+}
+
+
+/* =========================================================
+   PHASE
+   ========================================================= */
+
+.speaking-phase {
+    margin-bottom: 15px;
+    padding: 11px 14px;
+
+    border-radius: 13px;
+
+    background: rgba(215, 249, 241, 0.58);
+
+    color: #527B71;
+
+    text-align: center;
+
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================================
+   RECORDING
+   ========================================================= */
+
+.speaking-recording {
+    margin-top: 16px;
+    padding: 16px;
+
+    border-radius: 15px;
+
+    background: rgba(255, 255, 255, 0.6);
+
+    text-align: center;
+}
+
+.speaking-recording-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    color: #52756C;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.speaking-recording-dot {
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+
+    background: #A96E6E;
+}
+
+.speaking-recording.active .speaking-recording-dot {
+    animation: speakingPulse 1.15s infinite;
+}
+
+@keyframes speakingPulse {
+
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(1.28);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* ---------- AUDIO PLAYER ---------- */
+
+.speaking-audio {
+    width: 100%;
+
+    margin-top: 14px;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.speaking-button {
+    width: 100%;
+
+    margin-top: 14px;
+    padding: 14px 18px;
+
+    border: none;
+    border-radius: 13px;
+
+    background: #7AA095;
+
+    color: #FFFFFF;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.speaking-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.94;
+}
+
+.speaking-button.secondary {
+    background: rgba(122, 160, 149, 0.14);
+    color: #52756C;
+}
+
+.speaking-button.danger {
+    background: #A97676;
+}
+
+.speaking-button:disabled {
+    cursor: default;
+    opacity: 0.45;
+    transform: none;
+}
+
+
+/* =========================================================
+   S2 MODE CHOICE
+   ========================================================= */
+
+.speaking-mode-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 14px;
+
+    margin-top: 20px;
+}
+
+.speaking-mode-card {
+    padding: 22px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.speaking-mode-card:hover {
+    transform: translateY(-2px);
+
+    background: rgba(232, 248, 243, 0.83);
+
+    border-color: rgba(122, 160, 149, 0.34);
+}
+
+.speaking-mode-name {
+    color: #527B71;
+
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.speaking-mode-text {
+    margin-top: 6px;
+
+    color: #78918B;
+
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   PROMPTS / PARTS
+   ========================================================= */
+
+.speaking-prompt {
+    margin-bottom: 13px;
+    padding: 15px;
+
+    border: 1px solid rgba(122, 160, 149, 0.15);
+    border-radius: 13px;
+
+    background: rgba(255, 255, 255, 0.62);
+}
+
+.speaking-prompt-number {
+    margin-bottom: 5px;
+
+    color: #527B71;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.speaking-prompt-text {
+    color: #36534C;
+
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.speaking-prompt.active {
+    border-color: rgba(122, 160, 149, 0.46);
+
+    background: rgba(225, 246, 240, 0.75);
+}
+
+
+/* =========================================================
+   TEXT ANSWER MODE
+   ========================================================= */
+
+.speaking-textarea {
+    width: 100%;
+    min-height: 92px;
+
+    margin-top: 10px;
+    padding: 12px 13px;
+
+    resize: vertical;
+
+    border: 1px solid rgba(122, 160, 149, 0.28);
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.8);
+
+    color: #36534C;
+
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+
+    outline: none;
+}
+
+.speaking-textarea:focus {
+    border-color: #7AA095;
+}
+
+
+/* =========================================================
+   IMAGE TASKS
+   ========================================================= */
+
+.speaking-image {
+    display: block;
+
+    width: 100%;
+    max-height: 430px;
+
+    object-fit: contain;
+
+    margin: 0 auto 18px;
+
+    border-radius: 16px;
+}
+
+.speaking-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+.speaking-images img {
+    width: 100%;
+    height: 310px;
+
+    object-fit: cover;
+
+    border-radius: 15px;
+}
+
+
+/* =========================================================
+   PLAN
+   ========================================================= */
+
+.speaking-plan {
+    margin-top: 18px;
+}
+
+.speaking-plan-item {
+    margin-bottom: 10px;
+    padding: 12px 14px;
+
+    border-radius: 11px;
+
+    background: rgba(255, 255, 255, 0.62);
+
+    color: #47675F;
+
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   REVIEW / RESULT
+   ========================================================= */
+
+.speaking-review,
+.speaking-result {
+    display: none;
+
+    max-width: 760px;
+
+    margin: 18px auto 0;
+    padding: 22px;
+
+    text-align: center;
+}
+
+.speaking-review-title {
+    color: #527B71;
+
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.speaking-review-details,
+.speaking-result-text {
+    margin-top: 6px;
+
+    color: #617D76;
+
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   SUBMISSION
+   ========================================================= */
+
+.speaking-success {
+    padding: 22px;
+
+    border-radius: 17px;
+
+    background: rgba(222, 246, 235, 0.78);
+
+    color: #3F7461;
+
+    text-align: center;
+}
+
+.speaking-success-title {
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.speaking-success-text {
+    margin-top: 5px;
+
+    font-size: 14px;
+}
+
+
+/* ---------- HIDDEN ---------- */
+
+.speaking-hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 820px) {
+
+    .speaking-page {
+        padding:
+            54px
+            9px
+            30px;
+    }
+
+    .speaking-top {
+        margin-bottom: 9px;
+    }
+
+    .speaking-label {
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+
+    .speaking-title {
+        font-size: 21px;
+    }
+
+    .speaking-student {
+        margin-top: 3px;
+        font-size: 12px;
+    }
+
+    .speaking-back {
+        top: 8px;
+        left: 8px;
+
+        padding: 7px 9px;
+
+        font-size: 11px;
+    }
+
+    .speaking-instruction {
+        margin-bottom: 9px;
+        padding: 11px 13px;
+
+        font-size: 14px;
+    }
+
+    .speaking-layout {
+        display: block;
+    }
+
+    .speaking-main,
+    .speaking-side {
+        min-height: 0;
+
+        padding: 17px 15px;
+
+        border-radius: 18px;
+    }
+
+    .speaking-side {
+        margin-top: 8px;
+    }
+
+    .speaking-content-title {
+        margin-bottom: 15px;
+
+        font-size: 22px;
+    }
+
+    .speaking-text {
+        font-size: 19px;
+        line-height: 1.7;
+    }
+
+    .speaking-timer-card {
+        padding: 16px;
+    }
+
+    .speaking-timer {
+        font-size: 46px;
+    }
+
+    .speaking-mode-grid {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .speaking-mode-card {
+        padding: 17px;
+    }
+
+    .speaking-prompt-text {
+        font-size: 18px;
+    }
+
+    .speaking-textarea {
+        min-height: 84px;
+
+        font-size: 17px;
+    }
+
+    .speaking-images {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .speaking-images img {
+        height: 190px;
+    }
+
+    .speaking-button {
+        min-height: 48px;
+
+        font-size: 16px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+    .speaking-page {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .speaking-main,
+    .speaking-side {
+        padding: 14px 12px;
+    }
+
+    .speaking-text {
+        font-size: 18px;
+    }
+
+    .speaking-timer {
+        font-size: 42px;
+    }
+
+    .speaking-images img {
+        height: 165px;
+    }
+}
