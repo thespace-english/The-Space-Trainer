@@ -173,7 +173,7 @@
     width: 0%;
     height: 100%;
 
-    background: #7AA095;
+    background: #15968F;
     border-radius: 999px;
 
     transition: width 0.5s ease;
@@ -792,18 +792,24 @@
                 data.tasks.length
             ) {
 
-                progressSummary.textContent =
-                    submitted +
-                    " of " +
-                    data.tasks.length +
-                    " submitted · " +
-                    checked +
-                    " reviewed";
-
-                    const percent =
+               const percent =
     data.tasks.length > 0
-        ? (submitted / data.tasks.length) * 100
+        ? Math.round(
+            (submitted / data.tasks.length) * 100
+        )
         : 0;
+
+progressSummary.textContent =
+    submitted +
+    " of " +
+    data.tasks.length +
+    " submitted · " +
+    checked +
+    " reviewed · " +
+    percent +
+    "%";
+
+                   
 
 progressFill.style.width =
     percent + "%";
