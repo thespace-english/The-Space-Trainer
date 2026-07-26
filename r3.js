@@ -1,93 +1,328 @@
-/* =========================================
+/* =========================================================
    THE SPACE — EGE READING 3 ENGINE
-========================================= */
+   Builds NEW R3 trainers from READING_TASK
+   ========================================================= */
 
 const R3_API_URL =
     "https://script.google.com/macros/s/AKfycbxxTEqdc_eAgBYhxPlAxGdD4ufwliTjwp3Rvc_leSns3wG6tnS1KKlCQABN2OYHZP1nTQ/exec";
-
-const R3_COURSE = "EGE";
-const R3_SECTION = "R3";
 
 const R3_PAGE_URL =
     "https://thespace-english.github.io/The-Space-Trainer/ege-r3.html";
 
 
-/* STUDENT */
+/* =========================================================
+   CHECK TASK DATA
+   ========================================================= */
 
-const r3Params =
+if (
+    typeof READING_TASK === "undefined" ||
+    !READING_TASK.id ||
+    !READING_TASK.title ||
+    !READING_TASK.text ||
+    !Array.isArray(READING_TASK.questions)
+) {
+    throw new Error(
+        "READING_TASK is incomplete"
+    );
+}
+
+
+/* =========================================================
+   STUDENT
+   ========================================================= */
+
+const params =
     new URLSearchParams(
         window.location.search
     );
 
-let r3Student =
-    r3Params.get("student") || "";
+let student =
+    params.get("student") ||
+    localStorage.getItem("theSpaceStudent") ||
+    "";
 
-if (!r3Student) {
-    r3Student =
-        localStorage.getItem(
-            "theSpaceStudent"
-        ) || "";
-}
-
-if (r3Student) {
+if (student) {
     localStorage.setItem(
         "theSpaceStudent",
-        r3Student
+        student
     );
 }
 
-const studentElement =
+
+/* =========================================================
+   CREATE PAGE
+   ========================================================= */
+
+const app =
     document.getElementById(
-        "r3Student"
+        "readingApp"
     );
 
-if (studentElement) {
-    studentElement.textContent =
-        r3Student
-            ? "Student: " + r3Student
-            : "Student not selected";
-}
+app.innerHTML = `
+
+    <div class="space-decor space-decor-medium"></div>
+    <div class="space-decor space-decor-small"></div>
+
+    <button
+        class="reading-back"
+        id="readingBack"
+        type="button"
+    >
+        ← BACK TO R3
+    </button>
 
 
-/* BACK */
+    <div class="reading-page">
 
-function r3Back() {
+        <div class="reading-top">
 
-    if (window.history.length > 1) {
-        window.history.back();
-        return;
-    }
+            <div class="reading-label">
+                EGE · R3 · ${READING_TASK.id}
+            </div>
 
-    let url =
-        R3_PAGE_URL;
+            <h1 class="reading-title">
+                ${READING_TASK.title}
+            </h1>
 
-    if (r3Student) {
-        url +=
-            "?student=" +
-            encodeURIComponent(
-                r3Student
+            <div
+                id="readingStudent"
+                class="reading-student"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="readingReview"
+            class="reading-review"
+        >
+
+            <div class="reading-review-title">
+                LAST ATTEMPT
+            </div>
+
+            <div
+                id="readingReviewDetails"
+                class="reading-review-details"
+            ></div>
+
+            <button
+                id="readingRetryTop"
+                class="reading-button secondary"
+                type="button"
+            >
+                TRY AGAIN
+            </button>
+
+        </div>
+
+
+        <div class="reading-layout">
+
+
+            <section class="reading-main">
+
+                <h2 class="reading-text-title">
+                    ${READING_TASK.title}
+                </h2>
+
+                <div class="reading-text">
+                    ${READING_TASK.text}
+                </div>
+
+            </section>
+
+
+            <section class="reading-side">
+
+                <div class="reading-side-title">
+                    QUESTIONS
+                </div>
+
+                <form id="readingForm">
+
+                    <div id="readingQuestions"></div>
+
+                    <button
+                        id="readingCheck"
+                        class="reading-button"
+                        type="submit"
+                    >
+                        CHECK ANSWERS
+                    </button>
+
+                </form>
+
+            </section>
+
+        </div>
+
+
+        <div
+            id="readingResult"
+            class="reading-result"
+        >
+
+            <div
+                id="readingScore"
+                class="reading-score"
+            ></div>
+
+            <div
+                id="readingMistakes"
+                class="reading-mistakes"
+            ></div>
+
+            <div
+                id="readingSaved"
+                class="reading-saved"
+            ></div>
+
+            <button
+                id="readingRetryBottom"
+                class="reading-button secondary"
+                type="button"
+            >
+                TRY AGAIN
+            </button>
+
+        </div>
+
+    </div>
+`;
+
+
+/* =========================================================
+   STUDENT LINE
+   ========================================================= */
+
+document.getElementById(
+    "readingStudent"
+).textContent =
+    student
+        ? "Student: " + student
+        : "Student not selected";
+
+
+/* =========================================================
+   QUESTIONS
+   ========================================================= */
+
+const questionsContainer =
+    document.getElementById(
+        "readingQuestions"
+    );
+
+READING_TASK.questions.forEach(
+    question => {
+
+        const card =
+            document.createElement(
+                "div"
             );
+
+        card.className =
+            "reading-question";
+
+        card.dataset.question =
+            String(question.number);
+
+        card.dataset.answer =
+            String(question.answer);
+
+
+        const optionsHtml =
+            question.options
+                .map(
+                    (option, index) => `
+
+                        <label class="reading-option">
+
+                            <input
+                                type="radio"
+                                name="q${question.number}"
+                                value="${index + 1}"
+                            >
+
+                            <span>
+                                ${index + 1}) ${option}
+                            </span>
+
+                        </label>
+                    `
+                )
+                .join("");
+
+
+        card.innerHTML = `
+
+            <span class="reading-question-title">
+                ${question.number}. ${question.text}
+            </span>
+
+            ${optionsHtml}
+        `;
+
+
+        questionsContainer.appendChild(
+            card
+        );
     }
-
-    window.location.href =
-        url;
-}
+);
 
 
-/* HELPERS */
+/* =========================================================
+   BACK
+   ========================================================= */
 
-function r3Questions() {
+document.getElementById(
+    "readingBack"
+).addEventListener(
+    "click",
+    function () {
+
+        if (
+            window.history.length > 1
+        ) {
+            window.history.back();
+            return;
+        }
+
+        let url =
+            R3_PAGE_URL;
+
+        if (student) {
+
+            url +=
+                "?student=" +
+                encodeURIComponent(
+                    student
+                );
+        }
+
+        window.location.href =
+            url;
+    }
+);
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function getQuestionCards() {
+
     return document.querySelectorAll(
-        ".r3-question"
+        ".reading-question"
     );
 }
 
 
-function r3ClearStates() {
+function clearStates() {
 
     document
         .querySelectorAll(
-            ".r3-option"
+            ".reading-option"
         )
         .forEach(label => {
 
@@ -95,42 +330,42 @@ function r3ClearStates() {
                 "correct",
                 "wrong"
             );
-
         });
 }
 
 
-function r3Selected(card) {
+function getSelected(card) {
 
-    const input =
+    const selected =
         card.querySelector(
             'input[type="radio"]:checked'
         );
 
-    return input
-        ? input.value
+    return selected
+        ? selected.value
         : "";
 }
 
 
-function r3SetDisabled(value) {
+function setDisabled(value) {
 
     document
         .querySelectorAll(
-            '.r3-question input[type="radio"]'
+            '.reading-question input[type="radio"]'
         )
         .forEach(input => {
 
             input.disabled =
                 value;
-
         });
 }
 
 
-/* OLD + NEW ANSWER FORMAT */
+/* =========================================================
+   OLD + NEW SAVED ANSWER FORMAT
+   ========================================================= */
 
-function r3ParseAnswers(text) {
+function parseAnswers(text) {
 
     const answers = {};
 
@@ -145,11 +380,13 @@ function r3ParseAnswers(text) {
             const separator =
                 part.indexOf(":");
 
-            if (separator === -1) {
+            if (
+                separator === -1
+            ) {
                 return;
             }
 
-            const number =
+            const question =
                 part
                     .slice(
                         0,
@@ -168,20 +405,21 @@ function r3ParseAnswers(text) {
                     )
                     .trim();
 
-            answers[number] =
+            answers[question] =
                 answer === "-"
                     ? ""
                     : answer;
-
         });
 
     return answers;
 }
 
 
-/* SHOW SAVED ATTEMPT */
+/* =========================================================
+   SHOW PREVIOUS ANSWER
+   ========================================================= */
 
-function r3ShowSaved(
+function showSavedAnswer(
     card,
     userAnswer
 ) {
@@ -191,7 +429,7 @@ function r3ShowSaved(
 
     card
         .querySelectorAll(
-            ".r3-option"
+            ".reading-option"
         )
         .forEach(label => {
 
@@ -227,20 +465,17 @@ function r3ShowSaved(
                     "wrong"
                 );
             }
-
         });
 }
 
 
-/* LOAD LAST ATTEMPT */
+/* =========================================================
+   LAST ATTEMPT
+   ========================================================= */
 
-async function r3LoadLastAttempt() {
+async function loadLastAttempt() {
 
-    if (
-        !r3Student ||
-        typeof TASK_ID ===
-            "undefined"
-    ) {
+    if (!student) {
         return;
     }
 
@@ -250,23 +485,21 @@ async function r3LoadLastAttempt() {
             R3_API_URL +
             "?action=lastattempt" +
             "&student=" +
-            encodeURIComponent(
-                r3Student
-            ) +
-            "&course=" +
-            R3_COURSE +
-            "&section=" +
-            R3_SECTION +
+            encodeURIComponent(student) +
+            "&course=EGE" +
+            "&section=R3" +
             "&taskId=" +
             encodeURIComponent(
-                TASK_ID
+                READING_TASK.id
             );
+
 
         const response =
             await fetch(url);
 
         const data =
             await response.json();
+
 
         if (
             data.status !==
@@ -277,65 +510,55 @@ async function r3LoadLastAttempt() {
             return;
         }
 
+
         const last =
             data.lastAttempt;
 
-        const answers =
-            r3ParseAnswers(
+        const savedAnswers =
+            parseAnswers(
                 last.answers
             );
 
-        r3ClearStates();
 
-        r3Questions()
+        clearStates();
+
+
+        getQuestionCards()
             .forEach(card => {
 
                 const number =
                     card.dataset.question;
 
-                r3ShowSaved(
+                showSavedAnswer(
                     card,
-                    answers[number] || ""
+                    savedAnswers[number] || ""
                 );
-
             });
 
-        r3SetDisabled(true);
 
-        const checkButton =
-            document.getElementById(
-                "r3Check"
-            );
+        setDisabled(true);
 
-        if (checkButton) {
-            checkButton.style.display =
-                "none";
-        }
 
-        const review =
-            document.getElementById(
-                "r3Review"
-            );
+        document.getElementById(
+            "readingCheck"
+        ).style.display =
+            "none";
 
-        const details =
-            document.getElementById(
-                "r3ReviewDetails"
-            );
 
-        if (
-            review &&
-            details
-        ) {
+        document.getElementById(
+            "readingReviewDetails"
+        ).textContent =
+            "Attempt " +
+            last.attempt +
+            " · " +
+            last.result;
 
-            details.textContent =
-                "Attempt " +
-                last.attempt +
-                " · " +
-                last.result;
 
-            review.style.display =
-                "block";
-        }
+        document.getElementById(
+            "readingReview"
+        ).style.display =
+            "block";
+
 
     } catch (error) {
 
@@ -347,300 +570,322 @@ async function r3LoadLastAttempt() {
 }
 
 
-/* TRY AGAIN */
+/* =========================================================
+   TRY AGAIN
+   ========================================================= */
 
-function r3TryAgain() {
+function tryAgain() {
 
-    r3ClearStates();
+    clearStates();
+
 
     document
         .querySelectorAll(
-            '.r3-question input[type="radio"]'
+            '.reading-question input[type="radio"]'
         )
         .forEach(input => {
 
             input.checked =
                 false;
 
+            input.disabled =
+                false;
         });
 
-    r3SetDisabled(false);
 
-    const review =
-        document.getElementById(
-            "r3Review"
-        );
+    document.getElementById(
+        "readingReview"
+    ).style.display =
+        "none";
 
-    const result =
-        document.getElementById(
-            "r3Result"
-        );
 
-    const check =
-        document.getElementById(
-            "r3Check"
-        );
+    document.getElementById(
+        "readingResult"
+    ).style.display =
+        "none";
 
-    if (review) {
-        review.style.display =
-            "none";
-    }
 
-    if (result) {
-        result.style.display =
-            "none";
-    }
+    document.getElementById(
+        "readingCheck"
+    ).style.display =
+        "block";
 
-    if (check) {
-        check.style.display =
-            "block";
-    }
 
-    const text =
+    const main =
         document.querySelector(
-            ".r3-text"
+            ".reading-main"
         );
 
-    const questions =
+    const side =
         document.querySelector(
-            ".r3-questions"
+            ".reading-side"
         );
 
-    if (text) {
-        text.scrollTop = 0;
+
+    if (main) {
+        main.scrollTop = 0;
     }
 
-    if (questions) {
-        questions.scrollTop = 0;
+    if (side) {
+        side.scrollTop = 0;
     }
 }
 
 
-/* CHECK */
+document.getElementById(
+    "readingRetryTop"
+).addEventListener(
+    "click",
+    tryAgain
+);
 
-async function r3CheckAnswers() {
 
-    if (!r3Student) {
+document.getElementById(
+    "readingRetryBottom"
+).addEventListener(
+    "click",
+    tryAgain
+);
 
-        alert(
-            "Please return to R3 and choose your name."
-        );
 
-        return;
-    }
+/* =========================================================
+   CHECK + SAVE
+   ========================================================= */
 
-    r3ClearStates();
+document.getElementById(
+    "readingForm"
+).addEventListener(
+    "submit",
+    async function (event) {
 
-    let score = 0;
+        event.preventDefault();
 
-    const mistakes = [];
-    const answers = [];
 
-    const cards =
-        r3Questions();
+        if (!student) {
 
-    cards.forEach(card => {
-
-        const number =
-            card.dataset.question;
-
-        const correct =
-            card.dataset.answer;
-
-        const selected =
-            r3Selected(card);
-
-        answers.push(
-            number +
-            ":" +
-            (
-                selected ||
-                "-"
-            )
-        );
-
-        card
-            .querySelectorAll(
-                ".r3-option"
-            )
-            .forEach(label => {
-
-                const input =
-                    label.querySelector(
-                        "input"
-                    );
-
-                if (
-                    input.value ===
-                    correct
-                ) {
-                    label.classList.add(
-                        "correct"
-                    );
-                }
-
-                if (
-                    input.value ===
-                        selected &&
-                    selected !==
-                        correct
-                ) {
-                    label.classList.add(
-                        "wrong"
-                    );
-                }
-
-            });
-
-        if (
-            selected === correct
-        ) {
-            score++;
-        } else {
-            mistakes.push(
-                number
+            alert(
+                "Please return to R3 and choose your name."
             );
+
+            return;
         }
 
-    });
 
-    r3SetDisabled(true);
+        clearStates();
 
-    const resultText =
-        score +
-        "/" +
-        cards.length;
 
-    const mistakesText =
-        mistakes.length
-            ? mistakes.join(", ")
-            : "—";
+        let score = 0;
 
-    document.getElementById(
-        "r3Score"
-    ).textContent =
-        resultText;
+        const mistakes = [];
+        const answers = [];
 
-    document.getElementById(
-        "r3Mistakes"
-    ).textContent =
-        mistakes.length
-            ? "Mistakes: " +
-              mistakes.join(", ")
-            : "No mistakes";
+        const cards =
+            getQuestionCards();
 
-    document.getElementById(
-        "r3Saved"
-    ).textContent =
-        "Saving result...";
 
-    document.getElementById(
-        "r3Result"
-    ).style.display =
-        "block";
+        cards.forEach(
+            card => {
 
-    document.getElementById(
-        "r3Check"
-    ).style.display =
-        "none";
+                const number =
+                    card.dataset.question;
 
-    try {
+                const correct =
+                    card.dataset.answer;
 
-        const response =
-            await fetch(
-                R3_API_URL,
-                {
-                    method: "POST",
+                const selected =
+                    getSelected(card);
 
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
 
-                    body:
-                        JSON.stringify({
+                answers.push(
+                    number +
+                    ":" +
+                    (
+                        selected || "-"
+                    )
+                );
 
-                            student:
-                                r3Student,
 
-                            course:
-                                R3_COURSE,
+                card
+                    .querySelectorAll(
+                        ".reading-option"
+                    )
+                    .forEach(label => {
 
-                            section:
-                                R3_SECTION,
+                        const input =
+                            label.querySelector(
+                                "input"
+                            );
 
-                            taskId:
-                                TASK_ID,
 
-                            result:
-                                resultText,
+                        if (
+                            input.value ===
+                            correct
+                        ) {
+                            label.classList.add(
+                                "correct"
+                            );
+                        }
 
-                            mistakes:
-                                mistakesText,
 
-                            answers:
-                                answers.join(
-                                    ", "
-                                )
-                        })
+                        if (
+                            input.value ===
+                                selected &&
+                            selected !==
+                                correct
+                        ) {
+                            label.classList.add(
+                                "wrong"
+                            );
+                        }
+                    });
+
+
+                if (
+                    selected ===
+                    correct
+                ) {
+
+                    score++;
+
+                } else {
+
+                    mistakes.push(
+                        number
+                    );
                 }
-            );
+            }
+        );
 
-        const data =
-            await response.json();
 
-        if (
-            data.status ===
-            "success"
-        ) {
+        setDisabled(true);
+
+
+        const result =
+            score +
+            "/" +
+            cards.length;
+
+
+        const mistakesText =
+            mistakes.length
+                ? mistakes.join(", ")
+                : "—";
+
+
+        document.getElementById(
+            "readingScore"
+        ).textContent =
+            result;
+
+
+        document.getElementById(
+            "readingMistakes"
+        ).textContent =
+            mistakes.length
+                ? "Mistakes: " +
+                  mistakes.join(", ")
+                : "No mistakes";
+
+
+        document.getElementById(
+            "readingSaved"
+        ).textContent =
+            "Saving result...";
+
+
+        document.getElementById(
+            "readingResult"
+        ).style.display =
+            "block";
+
+
+        document.getElementById(
+            "readingReview"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "readingCheck"
+        ).style.display =
+            "none";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    R3_API_URL,
+                    {
+                        method:
+                            "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                student:
+                                    student,
+
+                                course:
+                                    "EGE",
+
+                                section:
+                                    "R3",
+
+                                taskId:
+                                    READING_TASK.id,
+
+                                result:
+                                    result,
+
+                                mistakes:
+                                    mistakesText,
+
+                                answers:
+                                    answers.join(
+                                        ", "
+                                    )
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
 
             document.getElementById(
-                "r3Saved"
+                "readingSaved"
             ).textContent =
-                "Result saved · Attempt " +
-                data.attempt;
+                data.status ===
+                    "success"
+                    ? "Result saved · Attempt " +
+                      data.attempt
+                    : "Could not save result";
 
-        } else {
+
+        } catch (error) {
+
+            console.error(error);
+
 
             document.getElementById(
-                "r3Saved"
+                "readingSaved"
             ).textContent =
                 "Could not save result";
         }
 
-    } catch (error) {
-
-        console.error(error);
-
-        document.getElementById(
-            "r3Saved"
-        ).textContent =
-            "Could not save result";
     }
-}
+);
 
 
-/* FORM */
+/* =========================================================
+   START
+   ========================================================= */
 
-const r3Form =
-    document.getElementById(
-        "r3Form"
-    );
-
-if (r3Form) {
-
-    r3Form.addEventListener(
-        "submit",
-        function(event) {
-
-            event.preventDefault();
-
-            r3CheckAnswers();
-        }
-    );
-}
-
-
-/* START */
-
-r3LoadLastAttempt();
+loadLastAttempt();
