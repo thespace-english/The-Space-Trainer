@@ -277,16 +277,6 @@ body {
 }
 
 
-/* ---------- FINAL SECONDS ---------- */
-
-.speaking-timer-card.warning .speaking-timer {
-    color: #A4745F;
-}
-
-.speaking-timer-card.warning .speaking-progress-bar {
-    background: #B78A73;
-}
-
 
 /* =========================================================
    PHASE
@@ -795,6 +785,45 @@ body {
 
         font-size: 16px;
     }
+}
+
+/* DECOR */
+
+.speaking-circle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* большой нижний круг */
+.speaking-circle-large {
+    width: 190px;
+    height: 190px;
+    left: -75px;
+    bottom: -75px;
+    background: rgba(73, 174, 160, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+}
+
+/* маленький круг поверх большого */
+.speaking-circle-small {
+    width: 70px;
+    height: 70px;
+    left: 105px;
+    bottom: -22px;
+    background: rgba(215, 249, 241, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+/* логотип */
+.speaking-logo {
+    position: fixed;
+    right: 22px;
+    bottom: 18px;
+    width: 120px;
+    height: auto;
+    z-index: 5;
 }
 
 

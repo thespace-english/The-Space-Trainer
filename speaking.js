@@ -240,6 +240,16 @@ function speakingBuildShell() {
 
     speakingApp.innerHTML = `
 
+    <div class="speaking-circle speaking-circle-large"></div>
+<div class="speaking-circle speaking-circle-small"></div>
+
+<img
+    class="speaking-logo"
+    src="https://thespace-english.github.io/EGE/logo.png"
+    alt="The Space"
+>
+
+
         <button
             class="speaking-back"
             type="button"
@@ -419,10 +429,7 @@ function speakingStartTimer(
 
     bar.style.width = "100%";
 
-    card.classList.remove(
-        "warning"
-    );
-
+    
 
     speakingTimerInterval =
         setInterval(
@@ -449,13 +456,7 @@ function speakingStartTimer(
                         percent
                     ) + "%";
 
-
-                if (remaining <= 10) {
-                    card.classList.add(
-                        "warning"
-                    );
-                }
-
+     
 
                 if (remaining <= 0) {
 
@@ -830,6 +831,7 @@ function speakingStartS1Preparation() {
 async function speakingStartS1Answer() {
 
     speakingStopTimer();
+        speakingBeep();
 
     speakingPhase =
         "recording";
