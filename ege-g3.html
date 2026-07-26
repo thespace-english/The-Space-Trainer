@@ -10,7 +10,7 @@
     >
     <link rel="icon" type="image/png" href="../favicon.png">
 
-    <title>The Space — EGE G1</title>
+    <title>The Space — EGE G2</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -22,7 +22,7 @@
     <style>
 
         /* =========================================
-           G1 — только для этой страницы
+           G2 — только для этой страницы
         ========================================= */
 
         .practice-area {
@@ -110,7 +110,7 @@
 
 
         /* =========================================
-           G1 PROGRESS
+           G2 PROGRESS
         ========================================= */
 
         .progress-box {
@@ -293,8 +293,6 @@
         }
 
 
-        /* результат конкретного задания */
-
         .task-progress {
             margin-top: 16px;
             padding-top: 14px;
@@ -375,13 +373,16 @@
 
         }
 
+
+        /* карточки всегда поверх декоративных кругов */
+
         .container,
-.practice-area,
-.assignment-list,
-.assignment-card {
-    position: relative;
-    z-index: 5;
-}
+        .practice-area,
+        .assignment-list,
+        .assignment-card {
+            position: relative;
+            z-index: 5;
+        }
 
     </style>
 
@@ -403,7 +404,7 @@
                 THE SPACE
             </div>
 
-            <h1>EGE · G1</h1>
+            <h1>EGE · G3</h1>
 
         </header>
 
@@ -443,7 +444,7 @@
                 <div class="progress-top">
 
                     <div class="progress-label">
-                        G1 PROGRESS
+                        G3 PROGRESS
                     </div>
 
                     <div
@@ -476,8 +477,6 @@
             </div>
 
 
-            <!-- ЗАГРУЗКА -->
-
             <div
                 id="loading"
                 class="message loading"
@@ -486,15 +485,11 @@
             </div>
 
 
-            <!-- ЗАДАНИЯ -->
-
             <div
                 id="assignmentList"
                 class="assignment-list"
             ></div>
 
-
-            <!-- СООБЩЕНИЕ -->
 
             <div
                 id="message"
@@ -527,7 +522,7 @@
 
 
         const COURSE = "EGE";
-        const SECTION = "G1";
+        const SECTION = "G3";
 
 
         const studentSelect =
@@ -649,8 +644,6 @@
                     }
                 );
 
-
-                /* запоминаем ученика */
 
                 const savedStudent =
                     localStorage.getItem(
@@ -810,14 +803,17 @@
                 }
             );
 
-if (data.totalTasks === 0) {
 
-    progressBox.style.display =
-        "none";
+            if (data.totalTasks === 0) {
 
-    return;
+                progressBox.style.display =
+                    "none";
 
-}
+                return;
+
+            }
+
+
             progressSummary.textContent =
                 data.completed +
                 " of " +
@@ -828,14 +824,12 @@ if (data.totalTasks === 0) {
 
 
             const completionPercent =
-                data.totalTasks
-                    ? Math.round(
-                        (
-                            data.completed /
-                            data.totalTasks
-                        ) * 100
-                    )
-                    : 0;
+                Math.round(
+                    (
+                        data.completed /
+                        data.totalTasks
+                    ) * 100
+                );
 
 
             progressFill.style.width =
@@ -849,7 +843,7 @@ if (data.totalTasks === 0) {
 
 
         /* =========================================
-           ЗАГРУЖАЕМ ВСЁ ДЛЯ УЧЕНИКА
+           ВСЁ ДЛЯ УЧЕНИКА
         ========================================= */
 
         async function loadStudentArea(
@@ -955,8 +949,6 @@ if (data.totalTasks === 0) {
                 }
 
 
-                /* НИЧЕГО НЕ НАЗНАЧЕНО */
-
                 if (
                     data.assignments.length === 0
                 ) {
@@ -973,8 +965,6 @@ if (data.totalTasks === 0) {
 
                 }
 
-
-                /* ЕСТЬ ЗАДАНИЯ */
 
                 practiceTitle.style.display =
                     "block";
@@ -1031,8 +1021,6 @@ if (data.totalTasks === 0) {
                         );
 
 
-                        /* ПРОГРЕСС ЭТОГО ЗАДАНИЯ */
-
                         const taskProgress =
                             document.createElement(
                                 "div"
@@ -1082,8 +1070,6 @@ if (data.totalTasks === 0) {
                             taskProgress
                         );
 
-
-                        /* ОТКРЫВАЕМ ТРЕНАЖЁР */
 
                         card.addEventListener(
                             "click",
