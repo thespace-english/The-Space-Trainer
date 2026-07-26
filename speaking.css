@@ -789,7 +789,21 @@ body {
 
 /* DECOR */
 
+/* SPEAKING — bottom circles position */
 
+.space-decor-medium {
+    left: 35px;
+    bottom: 45px;
+}
+
+.space-decor-small {
+    left: 185px;
+    bottom: 18px;
+}
+
+body::after {
+    bottom: -125px;
+}
 
 /* логотип */
 .speaking-logo {
