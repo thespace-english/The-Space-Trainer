@@ -240,8 +240,8 @@ function speakingBuildShell() {
 
     speakingApp.innerHTML = `
 
-    <div class="speaking-circle speaking-circle-large"></div>
-<div class="speaking-circle speaking-circle-small"></div>
+    <div class="space-decor space-decor-medium"></div>
+<div class="space-decor space-decor-small"></div>
 
 <img
     class="speaking-logo"
