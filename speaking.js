@@ -826,7 +826,23 @@ function speakingBuildS1() {
 }
 
 
-function speakingStartS1Preparation() {
+async function speakingStartS1Preparation() {
+
+    try {
+
+        await speakingGetMicrophone();
+
+    } catch (error) {
+
+        alert(
+            "Please allow microphone access."
+        );
+
+        console.error(error);
+
+        return;
+    }
+
 
     speakingPhase =
         "preparation";
