@@ -1,301 +1,339 @@
 /* =========================================================
-   THE SPACE — EGE WRITING ENGINE
-   W1 = Task 37
+   THE SPACE — WRITING ENGINE
+   EGE Writing 37 / 38
    ========================================================= */
+
+const WRITING_API_URL =
+    "https://script.google.com/macros/s/AKfycbxxTEqdc_eAgBYhxPlAxGdD4ufwliTjwp3Rvc_leSns3wG6tnS1KKlCQABN2OYHZP1nTQ/exec";
+
+
+const WRITING_WORD_LIMITS = {
+    min: 90,
+    max: 154
+};
 
 
 /* =========================================================
-   TASK CHECK
+   STATE
    ========================================================= */
 
-if (
-    typeof WRITING_TASK === "undefined" ||
-    !WRITING_TASK.id ||
-    !WRITING_TASK.type ||
-    !WRITING_TASK.title ||
-    !WRITING_TASK.taskHtml
-) {
-    throw new Error(
-        "WRITING_TASK is incomplete"
-    );
-}
-
-
-const WRITING_TYPE =
-    String(
-        WRITING_TASK.type
-    ).toUpperCase();
+let writingOriginalText = "";
+let writingWordCount = 0;
 
 
 /* =========================================================
    STUDENT
-   Same logic as Speaking
    ========================================================= */
 
-const writingParams =
-    new URLSearchParams(
-        window.location.search
-    );
+function writingGetStudent() {
 
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
 
-let writingStudent =
-    writingParams.get("student") ||
-    localStorage.getItem(
-        "theSpaceStudent"
-    ) ||
-    "";
-
-
-if (writingStudent) {
-    localStorage.setItem(
-        "theSpaceStudent",
-        writingStudent
-    );
+    return (
+        params.get("student") ||
+        localStorage.getItem(
+            "theSpaceStudent"
+        ) ||
+        ""
+    ).trim();
 }
 
 
 /* =========================================================
-   APP
+   WORD COUNT
    ========================================================= */
-
-const writingApp =
-    document.getElementById(
-        "writingApp"
-    );
-
-
-if (!writingApp) {
-    throw new Error(
-        'Element #writingApp not found'
-    );
-}
-
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
-function writingEscape(text) {
-
-    return String(text ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;");
-}
-
 
 function writingCountWords(text) {
 
-    const matches =
+    const clean =
         String(text || "")
-            .trim()
-            .match(
-                /[A-Za-zА-Яа-яЁё0-9]+(?:[’'\-][A-Za-zА-Яа-яЁё0-9]+)*/g
-            );
+            .trim();
 
+    if (!clean) {
+        return 0;
+    }
 
-    return matches
-        ? matches.length
-        : 0;
+    return clean
+        .split(/\s+/)
+        .filter(Boolean)
+        .length;
 }
 
 
-/* =========================================================
-   BACK
-   Same logic as Speaking
-   ========================================================= */
+function writingUpdateCounter() {
 
-function writingBack() {
+    const textarea =
+        document.getElementById(
+            "writingAnswer"
+        );
+
+    const counter =
+        document.getElementById(
+            "writingCounter"
+        );
+
+    const number =
+        document.getElementById(
+            "writingCounterNumber"
+        );
 
     if (
-        window.history.length > 1
+        !textarea ||
+        !counter ||
+        !number
     ) {
-        window.history.back();
         return;
     }
 
 
-    if (WRITING_TASK.backUrl) {
-
-        let url =
-            WRITING_TASK.backUrl;
-
-
-        if (writingStudent) {
-
-            url +=
-                (
-                    url.includes("?")
-                        ? "&"
-                        : "?"
-                ) +
-                "student=" +
-                encodeURIComponent(
-                    writingStudent
-                );
-        }
+    writingWordCount =
+        writingCountWords(
+            textarea.value
+        );
 
 
-        window.location.href =
-            url;
-
-        return;
-    }
+    number.textContent =
+        writingWordCount;
 
 
-    window.location.href =
-        "index.html";
+    const inRange =
+        writingWordCount >=
+            WRITING_WORD_LIMITS.min &&
+        writingWordCount <=
+            WRITING_WORD_LIMITS.max;
+
+
+    counter.classList.toggle(
+        "ok",
+        inRange
+    );
 }
 
 
 /* =========================================================
-   PAGE
+   ESCAPE
    ========================================================= */
 
-function writingBuildShell() {
+function writingEscape(value) {
 
-    writingApp.innerHTML = `
-
-        <div
-            class="space-decor space-decor-medium"
-        ></div>
-
-        <div
-            class="space-decor space-decor-small"
-        ></div>
-
-
-        <img
-            class="speaking-logo"
-            src="logo.png"
-            alt="The Space"
-        >
-
-
-        <button
-            class="speaking-back"
-            type="button"
-            id="writingBack"
-        >
-            ← BACK
-        </button>
-
-
-        <div class="speaking-page">
+    return String(
+        value ?? ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+}
 
 
-            <div class="speaking-top">
+/* =========================================================
+   BUILD PAGE
+   ========================================================= */
+
+function writingBuild() {
+
+    if (
+        typeof WRITING_TASK ===
+        "undefined"
+    ) {
+
+        throw new Error(
+            "WRITING_TASK is not defined"
+        );
+    }
 
 
-                <div class="speaking-label">
+    const student =
+        writingGetStudent();
 
-                    EGE ·
-                    ${WRITING_TYPE} ·
-                    ${writingEscape(
-                        WRITING_TASK.id
-                    )}
+
+    const app =
+        document.getElementById(
+            "writingApp"
+        );
+
+
+    app.innerHTML = `
+
+        <div class="writing-shell">
+
+            <a
+                href="${writingEscape(
+                    WRITING_TASK.backUrl ||
+                    "https://thespace-english.github.io/The-Space-Trainer/ege.html"
+                )}"
+                class="back-button"
+            >
+                ← BACK TO WRITING
+            </a>
+
+
+            <div class="writing-topbar">
+
+                <div class="writing-meta">
+
+                    <div class="writing-kicker">
+                        EGE · ${writingEscape(
+                            WRITING_TASK.type ||
+                            "W1"
+                        )}
+                    </div>
+
+                    <h1 class="writing-title">
+                        ${writingEscape(
+                            WRITING_TASK.title ||
+                            ""
+                        )}
+                    </h1>
+
+                    <div class="writing-task-id">
+                        ${writingEscape(
+                            WRITING_TASK.id ||
+                            ""
+                        )}
+                    </div>
 
                 </div>
 
 
-                <h1 class="speaking-title">
-
+                <div class="writing-student">
+                    Student:
                     ${writingEscape(
-                        WRITING_TASK.title
+                        student ||
+                        "Not selected"
                     )}
-
-                </h1>
-
-
-                <div
-                    id="writingStudent"
-                    class="speaking-student"
-                ></div>
-
+                </div>
 
             </div>
 
 
-            <section
-                class="speaking-main writing-task-card"
-            >
+            <div class="writing-layout">
 
-                <div
-                    class="writing-task"
-                >
+                <main class="writing-card">
 
-                    ${WRITING_TASK.taskHtml}
+                    <div class="writing-task-label">
+                        TASK
+                    </div>
 
-                </div>
-
-            </section>
+                    <div class="writing-task-text">
+                        ${WRITING_TASK.taskText || ""}
+                    </div>
 
 
-            <section
-                class="speaking-main writing-answer-card"
-            >
+                    <div class="writing-answer-title">
+                        YOUR ANSWER
+                    </div>
 
-
-                <div
-                    class="writing-answer-top"
-                >
+                    <textarea
+                        id="writingAnswer"
+                        class="writing-textarea"
+                        placeholder="Write your answer here..."
+                        spellcheck="true"
+                    ></textarea>
 
 
                     <div
-                        class="speaking-side-title writing-answer-label"
-                    >
-                        YOUR ANSWER
+                        id="writingResultArea"
+                    ></div>
+
+                </main>
+
+
+                <aside
+                    class="writing-card writing-side"
+                >
+
+                    <div class="writing-side-title">
+                        WRITING
                     </div>
 
 
                     <div
-                        id="writingWordCount"
-                        class="writing-word-count"
-                    ></div>
+                        id="writingCounter"
+                        class="writing-counter"
+                    >
+
+                        <div
+                            id="writingCounterNumber"
+                            class="writing-counter-number"
+                        >
+                            0
+                        </div>
+
+                        <div class="writing-counter-label">
+                            WORDS
+                        </div>
+
+                        <div class="writing-counter-range">
+                            Allowed range:
+                            ${WRITING_WORD_LIMITS.min}–${WRITING_WORD_LIMITS.max}
+                        </div>
+
+                    </div>
 
 
-                </div>
+                    <button
+                        id="writingSubmit"
+                        class="writing-button"
+                        type="button"
+                    >
+                        SUBMIT
+                    </button>
 
+                </aside>
 
-                <textarea
-                    id="writingAnswer"
-                    class="writing-textarea"
-                    spellcheck="true"
-                    autocomplete="off"
-                ></textarea>
-
-
-            </section>
-
+            </div>
 
         </div>
+
+
+        <img
+            src="https://thespace-english.github.io/The-Space-Trainer/logo.png"
+            class="corner-logo"
+            alt="The Space English Online"
+        >
     `;
 
 
-    document.getElementById(
-        "writingBack"
-    ).addEventListener(
-        "click",
-        writingBack
-    );
+    const textarea =
+        document.getElementById(
+            "writingAnswer"
+        );
 
 
-    document.getElementById(
-        "writingStudent"
-    ).textContent =
-        writingStudent
-            ? "Student: " +
-              writingStudent
-            : "Student not selected";
-
-
-    document.getElementById(
-        "writingAnswer"
-    ).addEventListener(
+    textarea.addEventListener(
         "input",
         writingUpdateCounter
     );
+
+
+    document
+        .getElementById(
+            "writingSubmit"
+        )
+        .addEventListener(
+            "click",
+            writingSubmit
+        );
 
 
     writingUpdateCounter();
@@ -303,64 +341,465 @@ function writingBuildShell() {
 
 
 /* =========================================================
-   WORD COUNTER
+   SUBMIT
    ========================================================= */
 
-function writingUpdateCounter() {
+async function writingSubmit() {
 
-    const answer =
+    const student =
+        writingGetStudent();
+
+
+    if (!student) {
+
+        alert(
+            "Student is not selected."
+        );
+
+        return;
+    }
+
+
+    const textarea =
         document.getElementById(
             "writingAnswer"
         );
 
 
-    const counter =
+    const submitButton =
         document.getElementById(
-            "writingWordCount"
+            "writingSubmit"
         );
 
 
-    const count =
+    const text =
+        textarea.value;
+
+
+    if (!text.trim()) {
+
+        alert(
+            "Write your answer first."
+        );
+
+        return;
+    }
+
+
+    /*
+       IMPORTANT:
+       This is the student's ORIGINAL.
+       We never edit or replace it.
+    */
+
+    writingOriginalText =
+        text;
+
+    writingWordCount =
         writingCountWords(
-            answer.value
+            writingOriginalText
         );
 
 
-    const min =
-        Number(
-            WRITING_TASK.minWords || 100
+    submitButton.disabled =
+        true;
+
+    submitButton.textContent =
+        "SUBMITTING...";
+
+
+    try {
+
+        const payload = {
+
+            action:
+                "writingSubmit",
+
+            student:
+                student,
+
+            course:
+                "EGE",
+
+            section:
+                WRITING_TASK.type ||
+                "W1",
+
+            taskId:
+                WRITING_TASK.id,
+
+            title:
+                WRITING_TASK.title ||
+                "",
+
+            originalText:
+                writingOriginalText,
+
+            wordCount:
+                writingWordCount
+        };
+
+
+        const response =
+            await fetch(
+                WRITING_API_URL,
+                {
+                    method:
+                        "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+                }
+            );
+
+
+        const responseText =
+            await response.text();
+
+
+        let data;
+
+        try {
+
+            data =
+                JSON.parse(
+                    responseText
+                );
+
+        } catch (error) {
+
+            throw new Error(
+                "Server response: " +
+                responseText
+            );
+        }
+
+
+        if (
+            data.status !==
+            "success"
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Could not save writing."
+            );
+        }
+
+
+        writingShowSubmitted(
+            data
         );
 
 
-    const max =
-        Number(
-            WRITING_TASK.maxWords || 140
+    } catch (error) {
+
+        console.error(
+            error
         );
 
 
-    counter.textContent =
-        `WORDS: ${count} / ${min}–${max}`;
+        alert(
+            "Could not save your writing."
+        );
 
 
-    counter.classList.remove(
-        "ok",
-        "out"
+        submitButton.disabled =
+            false;
+
+        submitButton.textContent =
+            "SUBMIT";
+    }
+}
+
+
+/* =========================================================
+   AFTER SUBMISSION
+   ========================================================= */
+
+function writingShowSubmitted(
+    data
+) {
+
+    const textarea =
+        document.getElementById(
+            "writingAnswer"
+        );
+
+
+    const submitButton =
+        document.getElementById(
+            "writingSubmit"
+        );
+
+
+    textarea.style.display =
+        "none";
+
+
+    submitButton.style.display =
+        "none";
+
+
+    const area =
+        document.getElementById(
+            "writingResultArea"
+        );
+
+
+    area.innerHTML = `
+
+        <div class="writing-review">
+
+            <div class="writing-review-title">
+                YOUR ORIGINAL ANSWER
+            </div>
+
+            <div class="writing-original">
+${writingEscape(
+    writingOriginalText
+)}
+            </div>
+
+
+            <div class="writing-status">
+
+                ${
+                    data.aiReviewReady
+                        ? "Проверено ИИ. Требует уточнения преподавателя."
+                        : "Работа отправлена. Ожидает автоматической проверки."
+                }
+
+            </div>
+
+        </div>
+    `;
+
+
+    /*
+       When AI review is connected,
+       it will be rendered separately here.
+
+       The original student text above
+       remains unchanged forever.
+    */
+
+    if (data.aiReview) {
+
+        writingRenderAIReview(
+            data.aiReview
+        );
+    }
+}
+
+
+/* =========================================================
+   AI REVIEW DISPLAY
+   AI DOES NOT GIVE SCORE
+   ========================================================= */
+
+function writingRenderAIReview(
+    review
+) {
+
+    const area =
+        document.getElementById(
+            "writingResultArea"
+        );
+
+
+    const aspects =
+        Array.isArray(
+            review.aspects
+        )
+            ? review.aspects
+            : [];
+
+
+    const errors =
+        Array.isArray(
+            review.languageErrors
+        )
+            ? review.languageErrors
+            : [];
+
+
+    let html = `
+
+        <div class="writing-review">
+
+            <div class="writing-review-title">
+                TASK ACHIEVEMENT
+            </div>
+    `;
+
+
+    aspects.forEach(
+        aspect => {
+
+            html += `
+
+                <div class="writing-aspect">
+
+                    <div class="writing-aspect-head">
+
+                        <div class="writing-aspect-mark">
+                            ${writingEscape(
+                                aspect.mark ||
+                                ""
+                            )}
+                        </div>
+
+                        <div class="writing-aspect-name">
+                            ${writingEscape(
+                                aspect.name ||
+                                ""
+                            )}
+                        </div>
+
+                    </div>
+
+                    ${
+                        aspect.comment
+                            ? `
+                                <div class="writing-aspect-comment">
+                                    ${writingEscape(
+                                        aspect.comment
+                                    )}
+                                </div>
+                            `
+                            : ""
+                    }
+
+                </div>
+            `;
+        }
     );
 
 
-    if (
-        count >= min &&
-        count <= max
-    ) {
-        counter.classList.add(
-            "ok"
-        );
+    html += `
 
-    } else if (count > 0) {
-        counter.classList.add(
-            "out"
+        </div>
+
+
+        <div class="writing-review">
+
+            <div class="writing-review-title">
+                LANGUAGE
+            </div>
+    `;
+
+
+    if (!errors.length) {
+
+        html += `
+
+            <div class="writing-error">
+                Языковые ошибки не отмечены.
+            </div>
+        `;
+
+    } else {
+
+        errors.forEach(
+            error => {
+
+                html += `
+
+                    <div class="writing-error">
+
+                        <div class="writing-error-fragment">
+                            ${writingEscape(
+                                error.fragment ||
+                                ""
+                            )}
+                        </div>
+
+                        <div class="writing-error-comment">
+                            ${writingEscape(
+                                error.comment ||
+                                ""
+                            )}
+                        </div>
+
+                    </div>
+                `;
+            }
         );
     }
+
+
+    html += `
+        </div>
+    `;
+
+
+    area.insertAdjacentHTML(
+        "beforeend",
+        html
+    );
+}
+
+
+/* =========================================================
+   TEACHER FINAL REVIEW
+   ========================================================= */
+
+function writingRenderTeacherFinal(
+    teacherComment,
+    score
+) {
+
+    const area =
+        document.getElementById(
+            "writingResultArea"
+        );
+
+
+    const oldStatus =
+        area.querySelector(
+            ".writing-status"
+        );
+
+
+    if (oldStatus) {
+        oldStatus.remove();
+    }
+
+
+    area.insertAdjacentHTML(
+        "beforeend",
+        `
+
+        <div class="writing-teacher-comment">
+
+            <div class="writing-teacher-label">
+                КОММЕНТАРИЙ ПРЕПОДАВАТЕЛЯ
+            </div>
+
+            <div class="writing-teacher-text">
+                ${writingEscape(
+                    teacherComment || ""
+                )}
+            </div>
+
+            <div class="writing-final-score">
+                Результат:
+                ${writingEscape(
+                    score || ""
+                )}
+            </div>
+
+        </div>
+        `
+    );
 }
 
 
@@ -368,4 +807,4 @@ function writingUpdateCounter() {
    START
    ========================================================= */
 
-writingBuildShell();
+writingBuild();
