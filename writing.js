@@ -174,6 +174,10 @@ function writingBuild() {
 
     app.innerHTML = `
 
+<div class="space-decor space-decor-medium"></div>
+<div class="space-decor space-decor-small"></div>
+
+
         <div class="writing-shell">
 
             <a
@@ -307,10 +311,10 @@ function writingBuild() {
 
 
         <img
-            src="https://thespace-english.github.io/The-Space-Trainer/logo.png"
-            class="corner-logo"
-            alt="The Space English Online"
-        >
+    src="https://thespace-english.github.io/The-Space-Trainer/logo.png"
+    class="platform-corner-logo"
+    alt="The Space English Online"
+>
     `;
 
 
