@@ -846,3 +846,150 @@ body::after {
         height: 165px;
     }
 }
+
+/* =========================================================
+   S2
+   ========================================================= */
+
+.speaking-s2-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 430px;
+    gap: 30px;
+    align-items: start;
+}
+
+.speaking-s2-task {
+    min-width: 0;
+}
+
+.speaking-s2-task-text {
+    color: #36534C;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.speaking-s2-task-text p {
+    margin: 0 0 14px;
+}
+
+.speaking-s2-prompts {
+    margin-top: 20px;
+}
+
+.speaking-s2-prompt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 10px 0;
+
+    color: #36534C;
+    font-size: 18px;
+}
+
+.speaking-s2-number {
+    font-weight: 800;
+    color: #138E87;
+}
+
+.speaking-s2-final-line {
+    margin-top: 22px;
+
+    color: #36534C;
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 800;
+}
+
+
+/* IMAGE */
+
+.speaking-s2-image-card {
+    width: 100%;
+    max-width: 430px;
+
+    margin: 0 auto;
+
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    background: rgba(255,255,255,0.55);
+
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 20px;
+}
+
+.speaking-s2-image {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    aspect-ratio: 4 / 3;
+
+    object-fit: cover;
+
+    border-radius: 14px;
+}
+
+
+/* CURRENT QUESTION */
+
+.speaking-s2-active-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        430px;
+
+    gap: 30px;
+    align-items: center;
+}
+
+.speaking-s2-active-question {
+    min-width: 0;
+}
+
+.speaking-s2-active-label {
+    margin-bottom: 10px;
+
+    color: #138E87;
+
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.speaking-s2-active-text {
+    color: #36534C;
+
+    font-size: 26px;
+    line-height: 1.35;
+    font-weight: 800;
+}
+
+.speaking-s2-current-question {
+    margin: 16px 0;
+
+    color: #36534C;
+
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: 800;
+}
+
+
+/* TABLET / MOBILE */
+
+@media (max-width: 900px) {
+
+    .speaking-s2-content,
+    .speaking-s2-active-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .speaking-s2-image-card {
+        max-width: 430px;
+    }
+}

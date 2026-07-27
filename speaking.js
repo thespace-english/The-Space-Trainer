@@ -416,69 +416,87 @@ function speakingStartTimer(
         return;
     }
 
-    let remaining =
-        Number(totalSeconds);
+    const durationMs =
+    Number(totalSeconds) * 1000;
 
-    timerLabel.textContent =
-        label;
+const startTime =
+    Date.now();
 
-    timer.textContent =
-        speakingFormatTime(
-            remaining
-        );
+timerLabel.textContent =
+    label;
 
-    bar.style.width = "100%";
+timer.textContent =
+    speakingFormatTime(
+        Number(totalSeconds)
+    );
 
-    
+bar.style.transition =
+    "width 0.08s linear";
 
-    speakingTimerInterval =
-        setInterval(
-            () => {
+bar.style.width =
+    "100%";
 
-                remaining--;
+
+speakingTimerInterval =
+    setInterval(
+        () => {
+
+            const elapsed =
+                Date.now() - startTime;
+
+            const leftMs =
+                Math.max(
+                    0,
+                    durationMs - elapsed
+                );
+
+            const remaining =
+                Math.ceil(
+                    leftMs / 1000
+                );
+
+
+            timer.textContent =
+                speakingFormatTime(
+                    remaining
+                );
+
+
+            const percent =
+                durationMs > 0
+                    ? (
+                        leftMs /
+                        durationMs
+                    ) * 100
+                    : 0;
+
+
+            bar.style.width =
+                percent + "%";
+
+
+            if (leftMs <= 0) {
+
+                speakingStopTimer();
 
                 timer.textContent =
-                    speakingFormatTime(
-                        remaining
-                    );
-
-                const percent =
-                    totalSeconds > 0
-                        ? (
-                            remaining /
-                            totalSeconds
-                          ) * 100
-                        : 0;
+                    "00:00";
 
                 bar.style.width =
-                    Math.max(
-                        0,
-                        percent
-                    ) + "%";
+                    "0%";
 
-     
 
-                if (remaining <= 0) {
-
-                    speakingStopTimer();
-
-                    timer.textContent =
-                        "00:00";
-
-                    bar.style.width =
-                        "0%";
-
-                    if (
-                        typeof onFinish ===
-                        "function"
-                    ) {
-                        onFinish();
-                    }
+                if (
+                    typeof onFinish ===
+                    "function"
+                ) {
+                    onFinish();
                 }
+            }
 
-            },
-            1000
-        );
+        },
+        50
+    );
 }
 
 
@@ -995,11 +1013,13 @@ async function speakingFinishS1() {
 
 function speakingBuildS2() {
 
+    const instruction =
     document.getElementById(
         "speakingInstruction"
-    ).textContent =
-        SPEAKING_TASK.instruction ||
-        "Ask four direct questions.";
+    );
+
+instruction.textContent = "";
+instruction.style.display = "none";
 
     const workspace =
         document.getElementById(
@@ -1301,11 +1321,10 @@ function speakingStartS2Ready() {
     `;
 
 
-    speakingStartTimer(
-        3,
-        "GET READY",
-        speakingStartS2Recording
-    );
+   setTimeout(
+    speakingStartS2Recording,
+    3000
+);
 }
 
 
@@ -1494,26 +1513,49 @@ function speakingShowS2CurrentPrompt(
 
     main.innerHTML = `
 
-        <div class="speaking-s2-active-layout">
+    <h2 class="speaking-content-title">
+        Task 2
+    </h2>
 
-            <div class="speaking-s2-active-question">
+    <div class="speaking-s2-content">
 
-                <div class="speaking-s2-active-label">
-                    QUESTION ${speakingCurrentPart + 1}
-                </div>
+        <div class="speaking-s2-task">
 
-                <div class="speaking-s2-active-text">
-                    ${speakingEscape(
-                        promptText
-                    )}
+            <div class="speaking-s2-task-text">
+                ${SPEAKING_TASK.taskText || ""}
+            </div>
+
+            <div class="speaking-s2-prompts">
+
+                <div class="speaking-s2-prompt">
+
+                    <span class="speaking-s2-number">
+                        ${speakingCurrentPart + 1}
+                    </span>
+
+                    <span>
+                        ${speakingEscape(
+                            promptText
+                        )}
+                    </span>
+
                 </div>
 
             </div>
 
-            ${imageHTML}
+            <div class="speaking-s2-final-line">
+                ${speakingEscape(
+                    SPEAKING_TASK.finalLine ||
+                    "You have 20 seconds to ask each question."
+                )}
+            </div>
 
         </div>
-    `;
+
+        ${imageHTML}
+
+    </div>
+`;
 }
 
 
