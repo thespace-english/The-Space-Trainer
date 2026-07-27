@@ -92,7 +92,7 @@ body::after {
     height: 285px;
 
     left: -45px;
-    bottom: -215px;
+    bottom: -175px;
 
     border-radius: 50%;
 
@@ -158,8 +158,8 @@ body::after {
     width: 105px;
     height: 105px;
 
-    left: 42px;
-    bottom: 105px;
+    left: 35px;
+    bottom: 45px;
 }
 
 
@@ -167,10 +167,9 @@ body::after {
     width: 70px;
     height: 70px;
 
-    left: 200px;
-    bottom: 22px;
+    left: 185px;
+    bottom: 18px;
 }
-
 
 /* =========================================================
    PLATFORM LOGO
@@ -179,10 +178,10 @@ body::after {
 .platform-corner-logo {
     position: fixed;
 
-    right: 28px;
-    bottom: 22px;
+    right: 18px;
+bottom: 14px;
 
-    width: 180px;
+width: 170px;
     height: auto;
 
     z-index: 10;
