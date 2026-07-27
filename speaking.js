@@ -1570,10 +1570,100 @@ function speakingStartS2Text() {
     const prompts =
         SPEAKING_TASK.prompts || [];
 
+    const main =
+        document.querySelector(
+            ".speaking-s2-main"
+        );
+
     const controls =
         document.getElementById(
             "speakingControls"
         );
+
+
+    const imageHTML =
+        SPEAKING_TASK.image
+            ? `
+                <div class="speaking-s2-image-card">
+                    <img
+                        class="speaking-s2-image"
+                        src="${speakingEscape(
+                            SPEAKING_TASK.image
+                        )}"
+                        alt=""
+                    >
+                </div>
+            `
+            : "";
+
+
+    main.innerHTML = `
+
+        <h2 class="speaking-content-title">
+            Task 2
+        </h2>
+
+        <div class="speaking-s2-content">
+
+            <div class="speaking-s2-task">
+
+                <div class="speaking-s2-task-text">
+                    ${SPEAKING_TASK.taskText || ""}
+                </div>
+
+                <div class="speaking-s2-prompts">
+
+                    ${prompts.map(
+                        (prompt, index) => {
+
+                            const promptText =
+                                typeof prompt === "string"
+                                    ? prompt
+                                    : prompt.text;
+
+                            return `
+                                <div class="speaking-s2-type-item">
+
+                                    <div class="speaking-s2-prompt">
+
+                                        <span class="speaking-s2-number">
+                                            ${index + 1}
+                                        </span>
+
+                                        <span>
+                                            ${speakingEscape(
+                                                promptText
+                                            )}
+                                        </span>
+
+                                    </div>
+
+                                    <textarea
+                                        class="speaking-textarea speaking-s2-type-answer"
+                                        data-part="${index + 1}"
+                                        placeholder="Write your question..."
+                                    ></textarea>
+
+                                </div>
+                            `;
+                        }
+                    ).join("")}
+
+                </div>
+
+                <div class="speaking-s2-final-line">
+                    ${speakingEscape(
+                        SPEAKING_TASK.finalLine ||
+                        "You have 20 seconds to ask each question."
+                    )}
+                </div>
+
+            </div>
+
+            ${imageHTML}
+
+        </div>
+    `;
 
 
     controls.innerHTML = `
@@ -1581,40 +1671,6 @@ function speakingStartS2Text() {
         <div class="speaking-phase">
             TYPE YOUR QUESTIONS
         </div>
-
-        ${prompts.map(
-            (prompt, index) => {
-
-                const promptText =
-                    typeof prompt ===
-                        "string"
-                        ? prompt
-                        : prompt.text;
-
-                return `
-
-                    <div class="speaking-prompt">
-
-                        <div class="speaking-prompt-number">
-                            QUESTION ${index + 1}
-                        </div>
-
-                        <div class="speaking-prompt-text">
-                            ${speakingEscape(
-                                promptText
-                            )}
-                        </div>
-
-                        <textarea
-                            class="speaking-textarea"
-                            data-part="${index + 1}"
-                            placeholder="Write your question..."
-                        ></textarea>
-
-                    </div>
-                `;
-            }
-        ).join("")}
 
         <button
             id="speakingSubmitText"
