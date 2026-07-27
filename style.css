@@ -666,6 +666,11 @@ h1 {
     cursor: pointer;
 }
 
+.active-link,
+.active-link:visited {
+    color: #173D43;
+    text-decoration: none;
+}
 
 .active-link:hover {
     background: rgba(19, 142, 135, 0.10);
