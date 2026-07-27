@@ -11,6 +11,41 @@
     z-index: 5;
 }
 
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.writing-back {
+    display: inline-flex;
+    align-items: center;
+
+    width: fit-content;
+
+    margin-bottom: 14px;
+    padding: 10px 16px;
+
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.52);
+    border: 1px solid rgba(255, 255, 255, 0.88);
+
+    color: #138E87;
+
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease;
+}
+
+.writing-back:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.76);
+}
 
 /* =========================================================
    HEADER
@@ -78,6 +113,15 @@
     font-weight: 700;
 
     white-space: nowrap;
+}
+
+.writing-student-inline {
+    margin-top: 7px;
+
+    color: #718B84;
+
+    font-size: 14px;
+    font-weight: 700;
 }
 
 

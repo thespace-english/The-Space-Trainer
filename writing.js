@@ -174,60 +174,50 @@ function writingBuild() {
 
     app.innerHTML = `
 
-<div class="space-decor space-decor-medium"></div>
-<div class="space-decor space-decor-small"></div>
-
-
         <div class="writing-shell">
 
             <a
-                href="${writingEscape(
-                    WRITING_TASK.backUrl ||
-                    "https://thespace-english.github.io/The-Space-Trainer/ege.html"
-                )}"
-                class="back-button"
-            >
-                ← BACK TO WRITING
-            </a>
+    class="writing-back"
+    href="${WRITING_TASK.backUrl || '#'}"
+>
+    ← BACK TO WRITING
+</a>
 
 
             <div class="writing-topbar">
 
-                <div class="writing-meta">
+    <div class="writing-meta">
 
-                    <div class="writing-kicker">
-                        EGE · ${writingEscape(
-                            WRITING_TASK.type ||
-                            "W1"
-                        )}
-                    </div>
+        <div class="writing-kicker">
+            EGE · ${writingEscape(
+                WRITING_TASK.type ||
+                "W1"
+            )}
+            ·
+            ${writingEscape(
+                WRITING_TASK.id ||
+                ""
+            )}
+        </div>
 
-                    <h1 class="writing-title">
-                        ${writingEscape(
-                            WRITING_TASK.title ||
-                            ""
-                        )}
-                    </h1>
+        <h1 class="writing-title">
+            ${writingEscape(
+                WRITING_TASK.title ||
+                ""
+            )}
+        </h1>
 
-                    <div class="writing-task-id">
-                        ${writingEscape(
-                            WRITING_TASK.id ||
-                            ""
-                        )}
-                    </div>
+        <div class="writing-student-inline">
+            Student:
+            ${writingEscape(
+                student ||
+                "Not selected"
+            )}
+        </div>
 
-                </div>
+    </div>
 
-
-                <div class="writing-student">
-                    Student:
-                    ${writingEscape(
-                        student ||
-                        "Not selected"
-                    )}
-                </div>
-
-            </div>
+</div>
 
 
             <div class="writing-layout">
@@ -311,10 +301,10 @@ function writingBuild() {
 
 
         <img
-    src="https://thespace-english.github.io/The-Space-Trainer/logo.png"
-    class="platform-corner-logo"
-    alt="The Space English Online"
->
+            src="https://thespace-english.github.io/The-Space-Trainer/logo.png"
+            class="corner-logo"
+            alt="The Space English Online"
+        >
     `;
 
 
