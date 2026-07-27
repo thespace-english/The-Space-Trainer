@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="favicon.png"
+    >
+
+    <title>The Space — EGE S2</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        .practice-area {
+            width: 100%;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+
+        /* STUDENT */
+
+        .student-box {
+            max-width: 520px;
+
+            margin: 0 auto 30px;
+            padding: 28px 32px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.78),
+                    rgba(255,255,255,0.58)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.94);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 18px 36px
+                rgba(97,155,147,0.14);
+
+            position: relative;
+            z-index: 3;
+        }
+
+
+        .student-box label {
+            display: block;
+
+            margin-bottom: 12px;
+
+            color: #138E87;
+
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+
+        .student-select {
+            width: 100%;
+
+            padding: 15px 18px;
+
+            border:
+                1px solid
+                rgba(122,160,149,0.25);
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.72);
+
+            color: #173D43;
+
+            font-family:
+                'Nunito',
+                sans-serif;
+
+            font-size: 18px;
+            font-weight: 600;
+
+            outline: none;
+            cursor: pointer;
+        }
+
+
+        /* SUMMARY */
+
+        .progress-box {
+            display: none;
+
+            margin: 0 auto 28px;
+            padding: 24px 30px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.78),
+                    rgba(255,255,255,0.58)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.94);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 18px 36px
+                rgba(97,155,147,0.14);
+
+            position: relative;
+            z-index: 3;
+        }
+
+
+        .progress-label {
+            color: #138E87;
+
+            font-size: 18px;
+            font-weight: 800;
+
+            letter-spacing: 3px;
+        }
+
+
+        .progress-summary {
+            margin-top: 7px;
+
+            color: #536F68;
+
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .progress-track {
+    width: 100%;
+    height: 10px;
+    margin-top: 16px;
+
+    background: rgba(122,160,149,0.16);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+
+    background: #15968F;
+    border-radius: 999px;
+
+    transition: width 0.5s ease;
+}
+
+
+        /* TITLE */
+
+        .practice-title {
+            display: none;
+
+            margin: 12px 0 22px;
+
+            text-align: center;
+
+            color: #138E87;
+
+            font-size: 18px;
+            font-weight: 800;
+
+            letter-spacing: 4px;
+        }
+
+
+        /* TASKS */
+
+        .assignment-list {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px 22px;
+        }
+
+
+        .assignment-card {
+            min-height: 170px;
+
+            padding: 30px 34px;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.78),
+                    rgba(255,255,255,0.60)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.94);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 18px 36px
+                rgba(97,155,147,0.14);
+
+            cursor: pointer;
+
+            position: relative;
+            z-index: 3;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+
+        .assignment-card:hover {
+            transform:
+                translateY(-4px);
+
+            box-shadow:
+                0 24px 44px
+                rgba(97,155,147,0.18);
+        }
+
+
+        .task-id {
+            margin-bottom: 9px;
+
+            color: #138E87;
+
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+
+        .task-title {
+            color: #173D43;
+
+            font-size: 18px;
+            line-height: 1.45;
+            font-weight: 600;
+        }
+
+
+        /* SPEAKING STATUS */
+
+        .task-progress {
+            margin-top: 15px;
+            padding-top: 13px;
+
+            border-top:
+                1px solid
+                rgba(122,160,149,0.16);
+
+            color: #536F68;
+
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 700;
+        }
+
+
+        .task-waiting {
+            color: #728C86;
+        }
+
+
+        .task-checked {
+            color: #138E87;
+        }
+
+
+        .task-score {
+            margin-top: 5px;
+
+            color: #36534C;
+
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+
+        .teacher-comment {
+            margin-top: 12px;
+            padding: 12px 14px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(215,249,241,0.62);
+
+            color: #36534C;
+
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 600;
+        }
+
+
+        .teacher-comment-title {
+            margin-bottom: 3px;
+
+            color: #138E87;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+
+        /* MESSAGE */
+
+        .message {
+            padding: 25px;
+
+            text-align: center;
+
+            color: #536F68;
+
+            font-size: 18px;
+
+            position: relative;
+            z-index: 3;
+        }
+
+
+        .loading {
+            display: none;
+        }
+
+
+        .container,
+        .practice-area,
+        .assignment-list,
+        .assignment-card {
+            position: relative;
+            z-index: 5;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .student-box,
+            .progress-box {
+                padding: 22px;
+            }
+
+            .assignment-list {
+                grid-template-columns: 1fr;
+            }
+
+            .assignment-card {
+                min-height: auto;
+                padding: 25px 27px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <a
+        href="ege.html"
+        class="back-button"
+    >
+        ← BACK TO EGE
+    </a>
+
+
+    <div class="container">
+
+        <header>
+
+            <div class="logo">
+                THE SPACE
+            </div>
+
+            <h1>EGE · S2</h1>
+
+        </header>
+
+
+        <main class="practice-area">
+
+
+            <div class="student-box">
+
+                <label for="studentSelect">
+                    CHOOSE YOUR NAME
+                </label>
+
+                <select
+                    id="studentSelect"
+                    class="student-select"
+                >
+
+                    <option value="">
+                        Select your name
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                id="progressBox"
+                class="progress-box"
+            >
+
+                <div class="progress-label">
+                    S2 PROGRESS
+                </div>
+
+                <div
+                    id="progressSummary"
+                    class="progress-summary"
+                ></div>
+
+                <div class="progress-track">
+
+    <div
+        id="progressFill"
+        class="progress-fill"
+    ></div>
+
+</div>
+
+            </div>
+
+
+            <div
+                id="practiceTitle"
+                class="practice-title"
+            >
+                YOUR PRACTICE
+            </div>
+
+
+            <div
+                id="loading"
+                class="message loading"
+            >
+                Loading...
+            </div>
+
+
+            <div
+                id="assignmentList"
+                class="assignment-list"
+            ></div>
+
+
+            <div
+                id="message"
+                class="message"
+            >
+                Choose your name to see your practice.
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <img
+        src="logo.png"
+        class="corner-logo"
+        alt="The Space English Online"
+    >
+
+
+    <script>
+
+        const API_URL =
+            "https://script.google.com/macros/s/AKfycbxxTEqdc_eAgBYhxPlAxGdD4ufwliTjwp3Rvc_leSns3wG6tnS1KKlCQABN2OYHZP1nTQ/exec";
+
+
+        const COURSE =
+            "EGE";
+
+        const SECTION =
+            "S2";
+
+
+        const studentSelect =
+            document.getElementById(
+                "studentSelect"
+            );
+
+        const assignmentList =
+            document.getElementById(
+                "assignmentList"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+        const loading =
+            document.getElementById(
+                "loading"
+            );
+
+        const practiceTitle =
+            document.getElementById(
+                "practiceTitle"
+            );
+
+        const progressBox =
+            document.getElementById(
+                "progressBox"
+            );
+
+        const progressSummary =
+            document.getElementById(
+                "progressSummary"
+            );
+
+            const progressFill =
+    document.getElementById(
+        "progressFill"
+    );
+
+        let speakingProgressMap = {};
+
+
+        /* STUDENTS */
+
+        async function loadStudents() {
+
+            try {
+
+                const url =
+                    API_URL +
+                    "?action=students" +
+                    "&course=" +
+                    encodeURIComponent(
+                        COURSE
+                    );
+
+
+                const response =
+                    await fetch(url);
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    data.status !==
+                        "success" ||
+                    !Array.isArray(
+                        data.students
+                    )
+                ) {
+                    throw new Error(
+                        "Invalid student data"
+                    );
+                }
+
+
+                data.students.forEach(
+                    student => {
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+                        option.value =
+                            student;
+
+                        option.textContent =
+                            student;
+
+                        studentSelect
+                            .appendChild(
+                                option
+                            );
+                    }
+                );
+
+
+                const savedStudent =
+                    localStorage.getItem(
+                        "theSpaceStudent"
+                    );
+
+
+                if (
+                    savedStudent &&
+                    data.students.includes(
+                        savedStudent
+                    )
+                ) {
+
+                    studentSelect.value =
+                        savedStudent;
+
+                    loadStudentArea(
+                        savedStudent
+                    );
+                }
+
+
+            } catch (error) {
+
+                message.textContent =
+                    "Could not load the student list.";
+
+                console.error(error);
+            }
+        }
+
+
+        /* STUDENT SELECT */
+
+        studentSelect.addEventListener(
+            "change",
+            function () {
+
+                const student =
+                    studentSelect.value;
+
+
+                assignmentList.innerHTML =
+                    "";
+
+                progressBox.style.display =
+                    "none";
+
+                practiceTitle.style.display =
+                    "none";
+
+                speakingProgressMap = {};
+
+
+                if (!student) {
+
+                    message.style.display =
+                        "block";
+
+                    message.textContent =
+                        "Choose your name to see your practice.";
+
+                    return;
+                }
+
+
+                localStorage.setItem(
+                    "theSpaceStudent",
+                    student
+                );
+
+
+                loadStudentArea(
+                    student
+                );
+            }
+        );
+
+
+        /* SPEAKING PROGRESS */
+
+        async function loadSpeakingProgress(
+            student
+        ) {
+
+            speakingProgressMap = {};
+
+
+            const url =
+                API_URL +
+                "?action=speakingprogress" +
+                "&student=" +
+                encodeURIComponent(
+                    student
+                ) +
+                "&course=" +
+                encodeURIComponent(
+                    COURSE
+                ) +
+                "&section=" +
+                encodeURIComponent(
+                    SECTION
+                );
+
+
+            const response =
+                await fetch(url);
+
+            const data =
+                await response.json();
+
+
+            if (
+                data.status !==
+                    "success" ||
+                !Array.isArray(
+                    data.tasks
+                )
+            ) {
+
+                throw new Error(
+                    "Invalid speaking progress"
+                );
+            }
+
+
+            let submitted = 0;
+            let checked = 0;
+
+
+            data.tasks.forEach(
+                task => {
+
+                    speakingProgressMap[
+                        task.taskId
+                    ] = task;
+
+
+                    if (
+                        Number(
+                            task.attempts
+                        ) > 0
+                    ) {
+                        submitted++;
+                    }
+
+
+                    const status =
+                        String(
+                            task.status || ""
+                        )
+                        .trim()
+                        .toLowerCase();
+
+
+                    if (
+                        status &&
+                        status !==
+                            "waiting"
+                    ) {
+                        checked++;
+                    }
+                }
+            );
+
+
+            if (
+                data.tasks.length
+            ) {
+
+               const percent =
+    data.tasks.length > 0
+        ? Math.round(
+            (submitted / data.tasks.length) * 100
+        )
+        : 0;
+
+progressSummary.textContent =
+    submitted +
+    " of " +
+    data.tasks.length +
+    " submitted · " +
+    checked +
+    " reviewed · " +
+    percent +
+    "%";
+
+                   
+
+progressFill.style.width =
+    percent + "%";
+
+                progressBox.style.display =
+                    "block";
+
+            } else {
+
+                progressBox.style.display =
+                    "none";
+            }
+        }
+
+
+        /* LOAD STUDENT */
+
+        async function loadStudentArea(
+            student
+        ) {
+
+            try {
+
+                await loadSpeakingProgress(
+                    student
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                speakingProgressMap = {};
+
+                progressBox.style.display =
+                    "none";
+            }
+
+
+            await loadAssignments(
+                student
+            );
+        }
+
+
+        /* ASSIGNMENTS */
+
+        async function loadAssignments(
+            student
+        ) {
+
+            try {
+
+                assignmentList.innerHTML =
+                    "";
+
+                message.style.display =
+                    "none";
+
+                practiceTitle.style.display =
+                    "none";
+
+                loading.style.display =
+                    "block";
+
+
+                const url =
+                    API_URL +
+                    "?action=assignments" +
+                    "&student=" +
+                    encodeURIComponent(
+                        student
+                    ) +
+                    "&course=" +
+                    encodeURIComponent(
+                        COURSE
+                    ) +
+                    "&section=" +
+                    encodeURIComponent(
+                        SECTION
+                    );
+
+
+                const response =
+                    await fetch(url);
+
+                const data =
+                    await response.json();
+
+
+                loading.style.display =
+                    "none";
+
+
+                if (
+                    data.status !==
+                        "success" ||
+                    !Array.isArray(
+                        data.assignments
+                    )
+                ) {
+
+                    throw new Error(
+                        "Invalid assignment data"
+                    );
+                }
+
+
+                if (
+                    data.assignments.length ===
+                    0
+                ) {
+
+                    message.style.display =
+                        "block";
+
+                    message.textContent =
+                        "No practice assigned yet.";
+
+                    return;
+                }
+
+
+                practiceTitle.style.display =
+                    "block";
+
+
+                data.assignments.forEach(
+                    task => {
+
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
+
+                        card.className =
+                            "assignment-card";
+
+
+                        const taskId =
+                            document.createElement(
+                                "div"
+                            );
+
+                        taskId.className =
+                            "task-id";
+
+                        taskId.textContent =
+                            task.taskId;
+
+
+                        const title =
+                            document.createElement(
+                                "div"
+                            );
+
+                        title.className =
+                            "task-title";
+
+                        title.textContent =
+                            task.title;
+
+
+                        card.appendChild(
+                            taskId
+                        );
+
+                        card.appendChild(
+                            title
+                        );
+
+
+                        const progress =
+                            speakingProgressMap[
+                                task.taskId
+                            ];
+
+
+                        const progressBox =
+                            document.createElement(
+                                "div"
+                            );
+
+                        progressBox.className =
+                            "task-progress";
+
+
+                        if (
+                            !progress ||
+                            !Number(
+                                progress.attempts
+                            )
+                        ) {
+
+                            progressBox
+                                .textContent =
+                                "Not submitted yet";
+
+                        } else {
+
+                            const status =
+                                String(
+                                    progress.status ||
+                                    ""
+                                )
+                                .trim()
+                                .toLowerCase();
+
+
+                            if (
+                                !status ||
+                                status ===
+                                    "waiting"
+                            ) {
+
+                                progressBox
+                                    .classList
+                                    .add(
+                                        "task-waiting"
+                                    );
+
+                                progressBox
+                                    .textContent =
+                                    "Attempts: " +
+                                    progress.attempts +
+                                    " · Waiting for teacher review";
+
+                            } else {
+
+                                progressBox
+                                    .classList
+                                    .add(
+                                        "task-checked"
+                                    );
+
+                                progressBox
+                                    .textContent =
+                                    "Reviewed · Attempts: " +
+                                    progress.attempts;
+
+
+                                if (
+                                    progress.score
+                                ) {
+
+                                    const score =
+                                        document
+                                        .createElement(
+                                            "div"
+                                        );
+
+                                    score.className =
+                                        "task-score";
+
+                                    score.textContent =
+                                        "Score: " +
+                                        progress.score;
+
+                                    progressBox
+                                        .appendChild(
+                                            score
+                                        );
+                                }
+
+
+                                if (
+                                    progress.comment
+                                ) {
+
+                                    const comment =
+                                        document
+                                        .createElement(
+                                            "div"
+                                        );
+
+                                    comment.className =
+                                        "teacher-comment";
+
+
+                                    const commentTitle =
+                                        document
+                                        .createElement(
+                                            "div"
+                                        );
+
+                                    commentTitle.className =
+                                        "teacher-comment-title";
+
+                                    commentTitle.textContent =
+                                        "Teacher's comment";
+
+
+                                    const commentText =
+                                        document
+                                        .createElement(
+                                            "div"
+                                        );
+
+                                    commentText.textContent =
+                                        progress.comment;
+
+
+                                    comment.appendChild(
+                                        commentTitle
+                                    );
+
+                                    comment.appendChild(
+                                        commentText
+                                    );
+
+                                    progressBox
+                                        .appendChild(
+                                            comment
+                                        );
+                                }
+                            }
+                        }
+
+
+                        card.appendChild(
+                            progressBox
+                        );
+
+
+                        card.addEventListener(
+                            "click",
+                            function () {
+
+                                const separator =
+                                    task.url.includes("?")
+                                        ? "&"
+                                        : "?";
+
+
+                                window.location.href =
+                                    task.url +
+                                    separator +
+                                    "student=" +
+                                    encodeURIComponent(
+                                        student
+                                    );
+                            }
+                        );
+
+
+                        assignmentList
+                            .appendChild(
+                                card
+                            );
+                    }
+                );
+
+
+            } catch (error) {
+
+                loading.style.display =
+                    "none";
+
+                message.style.display =
+                    "block";
+
+                message.textContent =
+                    "Could not load your practice.";
+
+                console.error(error);
+            }
+        }
+
+
+        loadStudents();
+
+    </script>
+
+</body>
+
+</html>
