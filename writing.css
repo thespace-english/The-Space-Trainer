@@ -1,0 +1,237 @@
+/* =========================================================
+   THE SPACE — EGE WRITING
+   Writing-specific styles
+   Base styles come from theme.css + speaking.css
+   ========================================================= */
+
+
+/* =========================================================
+   TASK CARD
+   ========================================================= */
+
+.writing-task-card {
+    min-height: 0;
+    max-width: 1080px;
+
+    margin:
+        0
+        auto
+        18px;
+
+    padding:
+        30px
+        32px;
+}
+
+
+.writing-task {
+    color: #304C46;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 18px;
+    line-height: 1.62;
+}
+
+
+.writing-task p {
+    margin:
+        0
+        0
+        18px;
+}
+
+
+.writing-task-title {
+    margin:
+        0
+        0
+        24px;
+
+    color: #36534C;
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 22px;
+    font-weight: 800;
+
+    text-align: center;
+}
+
+
+.writing-letter {
+    margin:
+        24px
+        0;
+
+    font-style: italic;
+}
+
+
+.writing-instructions {
+    margin-top: 26px;
+}
+
+
+.writing-instructions div {
+    margin:
+        5px
+        0;
+}
+
+
+/* =========================================================
+   ANSWER CARD
+   ========================================================= */
+
+.writing-answer-card {
+    min-height: 0;
+    max-width: 1080px;
+
+    margin:
+        0
+        auto;
+
+    padding:
+        26px
+        30px;
+}
+
+
+.writing-answer-top {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    margin-bottom: 14px;
+}
+
+
+.writing-answer-label {
+    margin: 0;
+}
+
+
+.writing-word-count {
+    color: #6F8982;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+.writing-word-count.ok {
+    color: #138E87;
+}
+
+
+.writing-word-count.out {
+    color: #A96E6E;
+}
+
+
+/* =========================================================
+   TEXTAREA
+   ========================================================= */
+
+.writing-textarea {
+    display: block;
+
+    width: 100%;
+    min-height: 430px;
+
+    padding:
+        18px
+        19px;
+
+    resize: vertical;
+
+    border:
+        1px
+        solid
+        rgba(122, 160, 149, 0.28);
+
+    border-radius: 15px;
+
+    background:
+        rgba(255, 255, 255, 0.82);
+
+    color: #36534C;
+
+    font-family:
+        'Nunito',
+        sans-serif;
+
+    font-size: 17px;
+    line-height: 1.6;
+
+    outline: none;
+}
+
+
+.writing-textarea:focus {
+    border-color: #7AA095;
+
+    box-shadow:
+        0
+        0
+        0
+        4px
+        rgba(122, 160, 149, 0.08);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 820px) {
+
+    .writing-task-card,
+    .writing-answer-card {
+        padding:
+            18px
+            15px;
+    }
+
+
+    .writing-task {
+        font-size: 16px;
+        line-height: 1.58;
+    }
+
+
+    .writing-task-title {
+        margin-bottom: 18px;
+
+        font-size: 20px;
+    }
+
+
+    .writing-answer-top {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 6px;
+    }
+
+
+    .writing-textarea {
+        min-height: 360px;
+
+        padding: 15px;
+
+        font-size: 17px;
+    }
+}
