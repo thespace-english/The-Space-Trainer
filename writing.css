@@ -16,18 +16,23 @@
    ========================================================= */
 
 .writing-back {
+    position: fixed;
+
+    top: 18px;
+    left: 0;
+
+    z-index: 30;
+
     display: inline-flex;
     align-items: center;
 
-    width: fit-content;
-
-    margin-bottom: 14px;
     padding: 10px 16px;
 
-    border-radius: 14px;
+    border-radius: 0 14px 14px 0;
 
-    background: rgba(255, 255, 255, 0.52);
-    border: 1px solid rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-left: 0;
 
     color: #138E87;
 
@@ -43,8 +48,7 @@
 }
 
 .writing-back:hover {
-    transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.76);
+    background: rgba(255, 255, 255, 0.82);
 }
 
 /* =========================================================
@@ -62,6 +66,8 @@
 
 .writing-meta {
     min-width: 0;
+    flex: 1;
+    text-align: center;
 }
 
 .writing-kicker {
