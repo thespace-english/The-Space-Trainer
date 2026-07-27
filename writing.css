@@ -4,7 +4,7 @@
    ========================================================= */
 
 .writing-shell {
-    width: min(1180px, calc(100% - 40px));
+    width: min(1320px, calc(100% - 40px));
     margin: 0 auto;
     padding: 30px 0 70px;
     position: relative;
@@ -136,10 +136,7 @@
    ========================================================= */
 
 .writing-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
-    gap: 24px;
-    align-items: start;
+    display: block;
 }
 
 
@@ -215,7 +212,8 @@
     display: block;
 
     width: 100%;
-    min-height: 360px;
+    min-height: 250px;
+height: 250px;
 
     padding: 22px 24px;
 
@@ -583,5 +581,48 @@
 
     .writing-textarea {
         min-height: 320px;
+    }
+}
+
+/* =========================================================
+   WRITING — COMPACT ANSWER FOOTER
+   ========================================================= */
+
+.writing-answer-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+
+    margin-top: 10px;
+}
+
+.writing-word-count {
+    color: #718B84;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.writing-word-count span {
+    color: #36534C;
+    font-weight: 800;
+}
+
+.writing-answer-footer .writing-button {
+    width: auto;
+    min-width: 150px;
+
+    margin-top: 0;
+    padding: 12px 28px;
+}
+
+@media (max-width: 600px) {
+
+    .writing-answer-footer {
+        align-items: flex-end;
+    }
+
+    .writing-answer-footer .writing-button {
+        min-width: 130px;
     }
 }

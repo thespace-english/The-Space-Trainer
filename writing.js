@@ -70,10 +70,7 @@ function writingUpdateCounter() {
             "writingAnswer"
         );
 
-    const counter =
-        document.getElementById(
-            "writingCounter"
-        );
+    
 
     const number =
         document.getElementById(
@@ -81,13 +78,11 @@ function writingUpdateCounter() {
         );
 
     if (
-        !textarea ||
-        !counter ||
-        !number
-    ) {
-        return;
-    }
-
+    !textarea ||
+    !number
+) {
+    return;
+}
 
     writingWordCount =
         writingCountWords(
@@ -99,17 +94,7 @@ function writingUpdateCounter() {
         writingWordCount;
 
 
-    const inRange =
-        writingWordCount >=
-            WRITING_WORD_LIMITS.min &&
-        writingWordCount <=
-            WRITING_WORD_LIMITS.max;
-
-
-    counter.classList.toggle(
-        "ok",
-        inRange
-    );
+    
 }
 
 
@@ -247,56 +232,29 @@ function writingBuild() {
                         spellcheck="true"
                     ></textarea>
 
+                    <div class="writing-answer-footer">
+
+    <div class="writing-word-count">
+        <span id="writingCounterNumber">0</span> words
+    </div>
+
+    <button
+        id="writingSubmit"
+        class="writing-button"
+        type="button"
+    >
+        SUBMIT
+    </button>
+
+</div>
+
 
                     <div
                         id="writingResultArea"
                     ></div>
 
-                </main>
+                </main>               
 
-
-                <aside
-                    class="writing-card writing-side"
-                >
-
-                    <div class="writing-side-title">
-                        WRITING
-                    </div>
-
-
-                    <div
-                        id="writingCounter"
-                        class="writing-counter"
-                    >
-
-                        <div
-                            id="writingCounterNumber"
-                            class="writing-counter-number"
-                        >
-                            0
-                        </div>
-
-                        <div class="writing-counter-label">
-                            WORDS
-                        </div>
-
-                        <div class="writing-counter-range">
-                            Allowed range:
-                            ${WRITING_WORD_LIMITS.min}–${WRITING_WORD_LIMITS.max}
-                        </div>
-
-                    </div>
-
-
-                    <button
-                        id="writingSubmit"
-                        class="writing-button"
-                        type="button"
-                    >
-                        SUBMIT
-                    </button>
-
-                </aside>
 
             </div>
 
