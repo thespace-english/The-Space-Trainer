@@ -993,3 +993,27 @@ body::after {
         max-width: 430px;
     }
 }
+
+/* =========================================================
+   S2 — SMALL SCREEN LAYOUT
+   ========================================================= */
+
+@media (max-width: 1150px) {
+
+    .speaking-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .speaking-main,
+    .speaking-side {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .speaking-s2-type-answer {
+        width: 100%;
+        min-width: 0;
+        min-height: 100px;
+    }
+}
