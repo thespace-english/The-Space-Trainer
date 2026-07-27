@@ -166,7 +166,7 @@ function writingBuild() {
 
             <a
     class="writing-back"
-    href="${WRITING_TASK.backUrl || '#'}"
+    href="${WRITING_TASK.backUrl || '#'}?student=${encodeURIComponent(student)}"
 >
     ← BACK TO WRITING
 </a>
@@ -761,7 +761,109 @@ function writingRenderTeacherFinal(
 
 
 /* =========================================================
+   LOAD LAST WRITING ATTEMPT
+   ========================================================= */
+
+async function writingLoadLastAttempt() {
+
+    const student =
+        writingGetStudent();
+
+
+    if (
+        !student ||
+        typeof WRITING_TASK ===
+        "undefined" ||
+        !WRITING_TASK.id
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const url =
+            WRITING_API_URL +
+            "?action=writinglastattempt" +
+            "&student=" +
+            encodeURIComponent(student) +
+            "&course=EGE" +
+            "&section=" +
+            encodeURIComponent(
+                WRITING_TASK.type || "W1"
+            ) +
+            "&taskId=" +
+            encodeURIComponent(
+                WRITING_TASK.id
+            );
+
+
+        const response =
+            await fetch(url);
+
+
+        if (!response.ok) {
+            throw new Error(
+                "Could not load last writing attempt"
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            data.status !== "success" ||
+            !data.found ||
+            !data.lastAttempt
+        ) {
+            return;
+        }
+
+
+        const last =
+            data.lastAttempt;
+
+
+        const textarea =
+            document.getElementById(
+                "writingAnswer"
+            );
+
+
+        if (textarea) {
+
+            textarea.value =
+                last.originalText || "";
+
+            writingOriginalText =
+                last.originalText || "";
+
+            writingUpdateCounter();
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Could not load previous writing:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
    START
    ========================================================= */
 
-writingBuild();
+async function writingInit() {
+
+    writingBuild();
+
+    await writingLoadLastAttempt();
+}
+
+
+writingInit();
